@@ -7,7 +7,7 @@ import { Burbuja } from '../../components/Burbuja'
 import { Canasta } from '../../components/Canasta'
 import { EncabezadoRol } from '../../components/EncabezadoRol'
 import { FrasePictos } from '../../components/FrasePictos'
-import { IconoAyuda, IconoCheck, IconoCruz } from '../../components/Iconos'
+import { IconoAltavoz, IconoAyuda, IconoCheck, IconoCruz } from '../../components/Iconos'
 import { Personaje } from '../../components/Personaje'
 import { Plato } from '../../components/Plato'
 import { TarjetaPaso } from '../../components/TarjetaPaso'
@@ -16,6 +16,7 @@ import type { MensajeCliente, Option, Picto } from '../../lib/protocol'
 import { sonarAcierto } from '../../lib/sonido'
 import { anchoEm } from '../../lib/etiqueta'
 import { decir, textoFrase } from '../../lib/tts'
+import { FrasePregunta } from './FrasePregunta'
 import { PistaAtributo, PistaMira } from './PistaAyuda'
 import { useJuego } from './store'
 
@@ -26,12 +27,8 @@ const msDesde = (t: number | null) => (t === null ? 0 : Math.round(performance.n
 
 const pausa = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
-/** [QUIERO, SÁNDWICH] del confirm se muestra y se dice como pregunta: ¿QUIERES SÁNDWICH? */
-const comoPregunta = (prompt: Picto[]): Picto[] =>
-  prompt.map((p, i) => ({
-    ...p,
-    label: `${i === 0 ? '¿' : ''}${p.id === 'QUIERO' ? 'QUIERES' : p.label}${i === prompt.length - 1 ? '?' : ''}`,
-  }))
+/** [QUIERO] del confirm se muestra como [QUIERES]: es la IA vendedora la que pregunta. Sin "¿?" en las etiquetas. */
+const comoPregunta = (prompt: Picto[]): Picto[] => prompt.map((p) => (p.id === 'QUIERO' ? { ...p, label: 'QUIERES' } : p))
 
 export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void }) {
   const seat = useJuego((s) => s.seat) ?? 'cliente'
@@ -41,6 +38,8 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
   const confirm = useJuego((s) => s.confirm)
   const pedido = useJuego((s) => s.pedido)
   const reducir = useReducedMotion() ?? false
+  // [QUIERO, SÁNDWICH] del confirm se dice como pregunta: ¿QUIERES SÁNDWICH?
+  const pregunta = confirm ? `¿${textoFrase(comoPregunta(confirm))}?` : ''
 
   const finVoz = useRef<number | null>(null)
   const tocadoEn = useRef<object | null>(null)
@@ -64,8 +63,8 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
   }, [round, avisoRonda])
 
   useEffect(() => {
-    if (confirm) decir(textoFrase(comoPregunta(confirm)))
-  }, [confirm])
+    if (pregunta) decir(pregunta)
+  }, [pregunta])
 
   // Feedback: se dice el npc y una frase amable; al terminar se aplican los mensajes en espera
   useEffect(() => {
@@ -158,6 +157,8 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
                   )}
                   <p className="min-w-0 text-center text-2xl leading-tight font-bold max-sm:sr-only">{fraseFeedback(feedback.ok, feedback.option_id)}</p>
                 </div>
+              ) : confirm ? (
+                <FrasePregunta pictos={burbuja} dicho={pregunta} />
               ) : mira || pista ? (
                 <>
                   <div className="lg:hidden">
@@ -179,8 +180,16 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
         {/* Tarjetas de tamaño fijo (proporción 220×244) que se achican solo si no caben; nunca se estiran */}
         <div className="min-h-0 flex-1 px-3 pt-4 pb-1 [container-type:size] lg:h-full">
           {confirm ? (
-            <div className="grid h-full place-items-center">
+            <div className="grid h-full grid-cols-[minmax(0,1fr)_auto] place-items-center gap-6">
               <Pictograma picto={confirm[confirm.length - 1]} />
+              <button
+                type="button"
+                onClick={() => decir(pregunta)}
+                aria-label={`Escuchar: ${pregunta}`}
+                className="grid size-24 shrink-0 place-items-center rounded-pildora border-4 border-tinta bg-maiz text-tinta shadow-suave-sm active:translate-y-1 active:shadow-none"
+              >
+                <IconoAltavoz className="size-10" />
+              </button>
             </div>
           ) : (
             <ul
