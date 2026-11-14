@@ -35,4 +35,5 @@ class RoomManager:
             return sala, [Joined(seat=sala.sesion.seat, seat_token=sala.token)] + sala.sesion.start_round()
         if token != sala.token:
             raise SalaOcupada
-        return sala, [Joined(seat=sala.sesion.seat, seat_token=sala.token), sala.sesion.ultimo]
+        pedido = [sala.sesion.swap] if sala.sesion.swap else []       # en el Modo B, qué pidió la IA
+        return sala, [Joined(seat=sala.sesion.seat, seat_token=sala.token), *pedido, sala.sesion.ultimo]

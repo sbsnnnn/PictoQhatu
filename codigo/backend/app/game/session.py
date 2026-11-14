@@ -86,6 +86,7 @@ class GameSession:
         self.ronda = None
         self.a = 0
         self.ultimo = None               # último Round / Confirm / GameOver (reconexión)
+        self.swap = None                 # RoleSwap del Modo B: al reconectar se reenvía el pedido
         self._totales = [0, 0, 0]        # turnos, ayudas, errores de los entornos ya cerrados
         self._rng_estado = None
 
@@ -139,8 +140,8 @@ class GameSession:
         if valor == "SI":
             self.tramo += 1
             self.env = _entorno_modo_b(self.rng, self.rng.choice(list(PLATOS)))
-            pedido = [picto("QUIERO"), picto(self.env.d)]
-            return [RoleSwap(seat=self.seat, order=pedido)] + self.start_round()
+            self.swap = RoleSwap(seat=self.seat, order=[picto("QUIERO"), picto(self.env.d)])
+            return [self.swap] + self.start_round()
         self.env = EntornoPictoCocina(self.rng)    # [NO]: el pedido se reinicia, no cuenta error
         return [Feedback(ok=True, npc=[picto("SI")])] + self.start_round()
 
