@@ -13,6 +13,8 @@ export interface EstadoJuego {
   confirm: Picto[] | null
   /** Frase que se dice una vez antes del próximo prompt (cambio de rol o de fase). */
   aviso: string | null
+  /** Aviso que acompaña a la ronda actual (se dice antes de su prompt). */
+  avisoRonda: string | null
   victory: boolean
   summary: Summary | null
   /** Mensajes que llegan mientras se muestra un feedback; se aplican al terminarlo. */
@@ -21,12 +23,12 @@ export interface EstadoJuego {
   terminarFeedback: () => void
 }
 
-function aplicar(m: MensajeServidor): Partial<EstadoJuego> {
+function aplicar(s: EstadoJuego, m: MensajeServidor): Partial<EstadoJuego> {
   switch (m.type) {
     case 'joined':
       return { seat: m.seat, pantalla: 'juego' }
     case 'round':
-      return { round: m, seat: m.seat, phase: m.phase, confirm: null, pantalla: 'juego' }
+      return { round: m, seat: m.seat, phase: m.phase, confirm: null, pantalla: 'juego', avisoRonda: s.aviso, aviso: null }
     case 'feedback':
       return { feedback: m }
     case 'confirm':
@@ -56,6 +58,7 @@ export const useJuego = create<EstadoJuego>()((set, get) => ({
   feedback: null,
   confirm: null,
   aviso: null,
+  avisoRonda: null,
   victory: false,
   summary: null,
   cola: [],
@@ -64,7 +67,7 @@ export const useJuego = create<EstadoJuego>()((set, get) => ({
       set((s) => ({ cola: [...s.cola, m] }))
       return
     }
-    set(aplicar(m))
+    set((s) => aplicar(s, m))
   },
   terminarFeedback: () => {
     set({ feedback: null })
@@ -72,7 +75,7 @@ export const useJuego = create<EstadoJuego>()((set, get) => ({
     set({ cola: [] })
     // Se aplican en orden; si aparece otro feedback, el resto vuelve a esperar
     for (const [i, m] of cola.entries()) {
-      set(aplicar(m))
+      set((s) => aplicar(s, m))
       if (get().feedback) {
         set({ cola: cola.slice(i + 1) })
         return
