@@ -1,4 +1,5 @@
 import { useState, type CSSProperties } from 'react'
+import { anchoEm } from '../lib/etiqueta'
 import type { Picto } from '../lib/protocol'
 
 /** Imagen del picto; si falta o no carga, no se dibuja nada (la etiqueta siempre está). */
@@ -49,8 +50,8 @@ export function Pictograma({ picto, tamano = 'md' }: Props) {
 
 /**
  * Picto que se ajusta al ancho de su contenedor (@container: burbuja o tarjeta de paso).
- * El alto lo fija `className`. La etiqueta se ajusta a su largo y al ancho de la caja para no cortarse
- * (≈0.72 em por letra mayúscula de Andika negrita).
+ * El alto lo fija `className`. La etiqueta deja 6 px de margen por lado y se ajusta a su ancho real
+ * (lib/etiqueta.ts) para no tocar el borde, hasta 24 px.
  */
 export function PictoFluido({ picto, className = '' }: { picto: Picto; className?: string }) {
   const caja = `@container flex w-full flex-col items-center justify-center rounded-2xl border-4 border-tinta bg-blanco ${className}`
@@ -62,11 +63,11 @@ export function PictoFluido({ picto, className = '' }: { picto: Picto; className
     )
   }
   return (
-    <div className={`${caja} gap-0.5 p-1`}>
+    <div className={`${caja} gap-0.5 py-1`}>
       <ImagenPicto picto={picto} className="w-full flex-1" />
       <span
-        style={{ '--n': Math.max(picto.label.length, 5) } as CSSProperties}
-        className="text-center text-[min(1.5rem,calc(100cqw/(var(--n)*0.72)))] leading-tight font-bold whitespace-nowrap uppercase"
+        style={{ '--em': anchoEm(picto.label) } as CSSProperties}
+        className="w-full px-1.5 text-center text-[min(1.5rem,calc((100cqw-0.75rem)/var(--em)))] leading-tight font-bold whitespace-nowrap uppercase"
       >
         {picto.label}
       </span>

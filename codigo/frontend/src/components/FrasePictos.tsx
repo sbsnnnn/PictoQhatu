@@ -7,7 +7,8 @@ import { PictoFluido } from './Pictograma'
 interface Props {
   pictos: Picto[]
   texto?: string
-  /** Botón de altavoz al final (en móvil lo cubre el botón de repetir de la barra inferior). */
+  /** Botón de altavoz al final, solo en tablet vertical. En móvil y en tablet horizontal lo cubre el botón de
+   *  repetir de la barra inferior, y así los pictos de la burbuja tienen ancho para etiquetas de 16 px. */
   altavoz?: boolean
   /** Alto de cada picto; el ancho se reparte dentro del contenedor. */
   alto?: string
@@ -37,7 +38,7 @@ export function FrasePictos({ pictos, texto, altavoz = true, alto = 'h-[5.5rem] 
           type="button"
           onClick={() => decir(dicho)}
           aria-label={`Escuchar: ${dicho}`}
-          className="grid size-20 shrink-0 place-items-center rounded-pildora border-4 border-tinta bg-maiz text-tinta shadow-suave-sm active:translate-y-1 active:shadow-none max-sm:hidden"
+          className="grid size-24 shrink-0 place-items-center rounded-pildora border-4 border-tinta bg-maiz text-tinta shadow-suave-sm active:translate-y-1 active:shadow-none max-sm:hidden lg:hidden"
         >
           <IconoAltavoz className="size-10" />
         </button>

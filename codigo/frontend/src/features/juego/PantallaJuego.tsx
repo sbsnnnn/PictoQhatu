@@ -14,6 +14,7 @@ import { TarjetaPaso } from '../../components/TarjetaPaso'
 import { ImagenPicto, Pictograma } from '../../components/Pictograma'
 import type { MensajeCliente, Option, Picto } from '../../lib/protocol'
 import { sonarAcierto } from '../../lib/sonido'
+import { anchoEm } from '../../lib/etiqueta'
 import { decir, textoFrase } from '../../lib/tts'
 import { useJuego } from './store'
 
@@ -111,7 +112,7 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
   const pista = !feedback && !confirm && round?.hint?.action === 'a5' ? round.hint.speech : ''
 
   // Mismo tamaño de etiqueta en todas las tarjetas de la ronda: lo fija la palabra más larga
-  const letras = Math.max(5, ...(round?.options ?? []).flatMap((o) => o.label.split(' ').map((w) => w.length)))
+  const letras = Math.max(2, ...(round?.options ?? []).flatMap((o) => o.label.split(' ').map(anchoEm)))
 
   const repetir = () => decir(textoFrase(paso ? [...burbuja, ...paso] : burbuja))
 
@@ -124,7 +125,7 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
       </p>
 
       {/* Tablet horizontal: personaje | tarjetas | panel. Una columna en móvil y tablet vertical. */}
-      <main className="flex min-h-0 flex-1 flex-col gap-3 px-4 pt-3 bajo:gap-2 bajo:pt-2 lg:grid lg:grid-cols-[minmax(15rem,22rem)_minmax(0,1fr)_minmax(10rem,13rem)] lg:grid-rows-[minmax(0,1fr)] lg:gap-x-6 lg:px-6 lg:pt-4">
+      <main className="flex min-h-0 flex-1 flex-col gap-3 px-4 pt-3 bajo:gap-2 bajo:pt-2 lg:grid lg:grid-cols-[minmax(15rem,23rem)_minmax(26rem,1fr)_minmax(10rem,13rem)] lg:grid-rows-[minmax(0,1fr)] lg:gap-x-6 lg:px-6 lg:pt-4">
         <div className="flex shrink-0 flex-col gap-5 lg:min-h-0 lg:justify-center">
           <section aria-live="polite" className="flex items-center gap-5 lg:flex-col lg:items-start">
             <div className="flex shrink-0 items-center gap-6 lg:ml-6">
@@ -132,26 +133,31 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
               {/* Vendedor en tablet horizontal: la respuesta del cliente va junto a él y la burbuja sigue con el pedido */}
               {vendedor && feedback?.option_id && <Respuesta ok={feedback.ok} className="max-lg:hidden" />}
             </div>
-            <Burbuja className={`min-w-0 flex-1 lg:w-full lg:flex-none ${burbuja.length || feedback ? '' : 'invisible'}`}>
+            <Burbuja
+              className={`min-w-0 flex-1 lg:w-full lg:flex-none ${burbuja.length || feedback ? '' : 'invisible'} ${paso && !feedback ? 'max-lg:hidden' : ''}`}
+            >
               {vendedor && feedback?.option_id && (
                 <div className="max-lg:hidden">
                   <FrasePictos pictos={burbuja} />
                 </div>
               )}
               {feedback ? (
-                <div className={`flex min-w-0 items-center gap-3 ${vendedor && feedback.option_id ? 'lg:hidden' : ''}`}>
+                <div className={`flex min-w-0 items-center justify-center gap-3 ${vendedor && feedback.option_id ? 'lg:hidden' : ''}`}>
                   <Sello ok={feedback.ok} />
                   {feedback.npc.length > 0 && (
                     <div className="w-24 shrink-0 lg:w-28">
                       <FrasePictos pictos={feedback.npc} altavoz={false} />
                     </div>
                   )}
-                  <p className="min-w-0 flex-1 text-2xl leading-tight font-bold max-sm:sr-only">{fraseFeedback(feedback.ok, feedback.option_id)}</p>
+                  <p className="min-w-0 text-center text-2xl leading-tight font-bold max-sm:sr-only">{fraseFeedback(feedback.ok, feedback.option_id)}</p>
                 </div>
               ) : (
                 <FrasePictos pictos={burbuja} />
               )}
             </Burbuja>
+            {/* En una columna el paso ocupa el lugar de la burbuja (el pedido queda en EL PLATO): así las tarjetas
+                miden lo mismo que en el cliente. La burbuja vuelve para la respuesta del cliente. */}
+            {paso && !feedback && <TarjetaPaso pictos={paso} className="min-w-0 flex-1 lg:hidden" />}
           </section>
           {paso && <TarjetaPaso pictos={paso} hecho={hecho} className="max-lg:hidden" />}
         </div>
@@ -175,19 +181,9 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
           )}
         </div>
 
-        {/* Panel: la canasta del cliente o el plato del vendedor. En una columna, el vendedor ve aquí su paso
-            (misma altura que la canasta: las tarjetas miden igual en los dos roles) */}
+        {/* Panel: la canasta del cliente o el plato del vendedor (fila de 4 casillas en una columna) */}
         <div className="flex h-24 shrink-0 items-center justify-center bajo:h-16 lg:h-auto lg:self-center">
-          {vendedor ? (
-            <>
-              {paso && <TarjetaPaso pictos={paso} hecho={hecho} className="h-full w-full max-w-md lg:hidden" />}
-              <div className="w-full max-lg:hidden">
-                <Plato pictos={plato} recien={hecho} />
-              </div>
-            </>
-          ) : (
-            <Canasta pictos={canasta} />
-          )}
+          {vendedor ? <Plato pictos={plato} recien={hecho} pedido={pedido?.at(-1)} /> : <Canasta pictos={canasta} />}
         </div>
       </main>
 
@@ -291,9 +287,9 @@ function TarjetaOpcion({
         ))}
       </span>
       <span
-        // "PONER LECHUGA" parte en dos líneas; una palabra larga (ZANAHORIA) achica todas las etiquetas de la ronda
-        style={{ '--n': letras } as CSSProperties}
-        className="text-center text-[min(1.875rem,calc(100cqw/(var(--n)*0.7)))] leading-tight font-bold tracking-wide uppercase"
+        // "PONER LECHUGA" parte en dos líneas; la palabra más ancha de la ronda fija el tamaño de todas (lib/etiqueta.ts)
+        style={{ '--em': letras } as CSSProperties}
+        className="w-full px-2 text-center text-[min(1.875rem,calc((100cqw-1rem)/var(--em)))] leading-tight font-bold uppercase"
       >
         {opcion.label}
       </span>
