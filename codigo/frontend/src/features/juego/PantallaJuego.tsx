@@ -7,15 +7,16 @@ import { Burbuja } from '../../components/Burbuja'
 import { Canasta } from '../../components/Canasta'
 import { EncabezadoRol } from '../../components/EncabezadoRol'
 import { FrasePictos } from '../../components/FrasePictos'
-import { IconoCheck, IconoCruz, IconoMira } from '../../components/Iconos'
+import { IconoAltavoz, IconoAyuda, IconoCheck, IconoCruz } from '../../components/Iconos'
 import { Personaje } from '../../components/Personaje'
 import { Plato } from '../../components/Plato'
 import { TarjetaPaso } from '../../components/TarjetaPaso'
-import { ImagenPicto, Pictograma } from '../../components/Pictograma'
-import type { MensajeCliente, Option, Picto } from '../../lib/protocol'
+import { ImagenPicto, PictoFluido } from '../../components/Pictograma'
+import type { MensajeCliente, Option, Picto, Seat } from '../../lib/protocol'
 import { sonarAcierto } from '../../lib/sonido'
 import { anchoEm } from '../../lib/etiqueta'
 import { decir, textoFrase } from '../../lib/tts'
+import { PistaAtributo, PistaMira } from './PistaAyuda'
 import { useJuego } from './store'
 
 type Estado = 'normal' | 'resaltar' | 'mostrar' | 'ok' | 'no'
@@ -25,12 +26,8 @@ const msDesde = (t: number | null) => (t === null ? 0 : Math.round(performance.n
 
 const pausa = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
-/** [QUIERO, SÁNDWICH] del confirm se muestra y se dice como pregunta: ¿QUIERES SÁNDWICH? */
-const comoPregunta = (prompt: Picto[]): Picto[] =>
-  prompt.map((p, i) => ({
-    ...p,
-    label: `${i === 0 ? '¿' : ''}${p.id === 'QUIERO' ? 'QUIERES' : p.label}${i === prompt.length - 1 ? '?' : ''}`,
-  }))
+/** La voz dice el confirm como pregunta de la vendedora: [QUIERO] + [SÁNDWICH] → "¿QUIERES SÁNDWICH?". */
+const comoPregunta = (prompt: Picto[]): Picto[] => prompt.map((p) => (p.id === 'QUIERO' ? { ...p, label: 'QUIERES' } : p))
 
 export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void }) {
   const seat = useJuego((s) => s.seat) ?? 'cliente'
@@ -40,6 +37,8 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
   const confirm = useJuego((s) => s.confirm)
   const pedido = useJuego((s) => s.pedido)
   const reducir = useReducedMotion() ?? false
+  // [QUIERO, SÁNDWICH] del confirm se dice como pregunta: ¿QUIERES SÁNDWICH?
+  const pregunta = confirm ? `¿${textoFrase(comoPregunta(confirm))}?` : ''
 
   const finVoz = useRef<number | null>(null)
   const tocadoEn = useRef<object | null>(null)
@@ -63,8 +62,8 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
   }, [round, avisoRonda])
 
   useEffect(() => {
-    if (confirm) decir(textoFrase(comoPregunta(confirm)))
-  }, [confirm])
+    if (pregunta) decir(pregunta)
+  }, [pregunta])
 
   // Feedback: se dice el npc y una frase amable; al terminar se aplican los mensajes en espera
   useEffect(() => {
@@ -105,16 +104,23 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
   // Burbuja: el cliente ve la pregunta o el prompt; el vendedor, el pedido de la IA clienta
   const vendedor = seat === 'vendedor'
   let burbuja: Picto[] = vendedor ? (pedido ?? []) : (round?.prompt ?? [])
-  if (confirm) burbuja = comoPregunta(confirm)
   // El paso que se prepara ahora ([PONER] + [POLLO]) va aparte, en su tarjeta
   const paso = vendedor && round && !confirm ? round.prompt : null
   const hecho = vendedor && !!feedback?.ok && !!feedback.option_id
-  const pista = !feedback && !confirm && round?.hint?.action === 'a5' ? round.hint.speech : ''
+  const ayuda = !feedback && !confirm ? round?.hint : null
+  const pista = ayuda?.action === 'a5' ? ayuda.speech : ''
+  // a1 (volver a decir): la frase dicha se enmarca en maíz mientras dura la ronda
+  const eco = ayuda?.action === 'a1' ? 'ring-8 ring-maiz' : ''
+  // En tablet horizontal la burbuja muestra la pista (como en el diseño): ¡MIRA! + el picto de la respuesta (a2/a4)
+  // o el atributo (a5). En una columna el a5 ocupa el lugar del plato o la canasta: no le quita alto a las tarjetas.
+  const mira = ayuda?.target ? round?.options.find((o) => o.id === ayuda.target)?.pictos.at(-1) : undefined
 
   // Mismo tamaño de etiqueta en todas las tarjetas de la ronda: lo fija la palabra más larga
   const letras = Math.max(2, ...(round?.options ?? []).flatMap((o) => o.label.split(' ').map(anchoEm)))
 
   const repetir = () => decir(textoFrase(paso ? [...burbuja, ...paso] : burbuja))
+
+  if (confirm) return <Confirmacion seat={seat} ia={ia} confirm={confirm} pregunta={pregunta} onRespuesta={responder} />
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-crema">
@@ -134,7 +140,7 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
               {vendedor && feedback?.option_id && <Respuesta ok={feedback.ok} className="max-lg:hidden" />}
             </div>
             <Burbuja
-              className={`min-w-0 flex-1 lg:w-full lg:flex-none ${burbuja.length || feedback ? '' : 'invisible'} ${paso && !feedback ? 'max-lg:hidden' : ''}`}
+              className={`min-w-0 flex-1 lg:w-full lg:flex-none ${burbuja.length || feedback ? '' : 'invisible'} ${paso && !feedback ? 'max-lg:hidden' : ''} ${eco}`}
             >
               {vendedor && feedback?.option_id && (
                 <div className="max-lg:hidden">
@@ -151,25 +157,28 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
                   )}
                   <p className="min-w-0 text-center text-2xl leading-tight font-bold max-sm:sr-only">{fraseFeedback(feedback.ok, feedback.option_id)}</p>
                 </div>
+
+              ) : mira || pista ? (
+                <>
+                  <div className="lg:hidden">
+                    <FrasePictos pictos={burbuja} />
+                  </div>
+                  {pista ? <PistaAtributo texto={pista} className="max-lg:hidden" /> : mira && <PistaMira picto={mira} className="max-lg:hidden" />}
+                </>
               ) : (
                 <FrasePictos pictos={burbuja} />
               )}
             </Burbuja>
             {/* En una columna el paso ocupa el lugar de la burbuja (el pedido queda en EL PLATO): así las tarjetas
                 miden lo mismo que en el cliente. La burbuja vuelve para la respuesta del cliente. */}
-            {paso && !feedback && <TarjetaPaso pictos={paso} className="min-w-0 flex-1 lg:hidden" />}
+            {paso && !feedback && <TarjetaPaso pictos={paso} className={`min-w-0 flex-1 lg:hidden ${eco}`} />}
           </section>
-          {paso && <TarjetaPaso pictos={paso} hecho={hecho} className="max-lg:hidden" />}
+          {paso && <TarjetaPaso pictos={paso} hecho={hecho} className={`max-lg:hidden ${eco}`} />}
         </div>
 
         {/* Tarjetas de tamaño fijo (proporción 220×244) que se achican solo si no caben; nunca se estiran */}
         <div className="min-h-0 flex-1 px-3 pt-4 pb-1 [container-type:size] lg:h-full">
-          {confirm ? (
-            <div className="grid h-full place-items-center">
-              <Pictograma picto={confirm[confirm.length - 1]} />
-            </div>
-          ) : (
-            <ul
+          <ul
               className="mx-auto flex h-full max-w-[calc(var(--carta)*2+var(--hueco))] flex-wrap content-center justify-center gap-(--hueco) [--carta:min(13.75rem,calc((100cqw-var(--hueco))/2),calc((100cqh-var(--hueco))/2*0.9))] [--hueco:1rem] lg:[--hueco:1.5rem]"
             >
               {round?.options.slice(0, 4).map((o) => (
@@ -177,28 +186,27 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
                   <TarjetaOpcion opcion={o} letras={letras} estado={estadoDe(o)} reducir={reducir} onTocar={() => tocar(o.id)} />
                 </li>
               ))}
-            </ul>
-          )}
+          </ul>
         </div>
 
         {/* Panel: la canasta del cliente o el plato del vendedor (fila de 4 casillas en una columna) */}
         <div className="flex h-24 shrink-0 items-center justify-center bajo:h-16 lg:h-auto lg:self-center">
-          {vendedor ? <Plato pictos={plato} recien={hecho} pedido={pedido?.at(-1)} /> : <Canasta pictos={canasta} />}
+          {pista && (
+            <PistaAtributo
+              texto={pista}
+              className="rounded-pildora border-4 border-tinta bg-blanco py-1 pr-5 pl-1 shadow-suave-sm lg:hidden"
+            />
+          )}
+          <div className={`contents ${pista ? 'max-lg:hidden' : ''}`}>
+            {vendedor ? <Plato pictos={plato} recien={hecho} pedido={pedido?.at(-1)} /> : <Canasta pictos={canasta} />}
+          </div>
         </div>
       </main>
 
       <footer className="shrink-0 px-4 pt-3 pb-4 bajo:pt-2 bajo:pb-3 sm:pb-6">
         <div className="mx-auto grid max-w-2xl grid-cols-[1.15fr_1fr] gap-3 lg:flex lg:max-w-none lg:justify-center lg:gap-8">
-          {confirm ? (
-            <div className="col-span-2 flex justify-center">
-              <BotonSiNo onRespuesta={responder} />
-            </div>
-          ) : (
-            <>
-              <BotonAyuda onClick={() => enviar({ type: 'help' })} className="lg:w-80" />
-              <BotonRepetir onClick={repetir} className="lg:w-72" />
-            </>
-          )}
+          <BotonAyuda onClick={() => enviar({ type: 'help' })} className="lg:w-80" />
+          <BotonRepetir onClick={repetir} className="lg:w-72" />
         </div>
       </footer>
     </div>
@@ -212,6 +220,77 @@ function Respuesta({ ok, className = '' }: { ok: boolean; className?: string }) 
       {ok ? <IconoCheck className="size-12" /> : <IconoCruz className="size-12" />}
       {ok ? '¡SÍ!' : 'NO'}
     </p>
+  )
+}
+
+/**
+ * Cierre del Modo A (diseño 02b): la vendedora pregunta [QUIERO]? + [plato] en una burbuja grande al centro,
+ * con altavoz, y debajo [SÍ]/[NO]. Sin tarjetas ni canasta: un solo foco de atención.
+ * La burbuja es propia (no Burbuja): aquí el pico apunta a la vendedora a la izquierda también en tablet horizontal.
+ */
+function Confirmacion({ seat, ia, confirm, pregunta, onRespuesta }: {
+  seat: Seat
+  ia: Seat
+  confirm: Picto[]
+  pregunta: string
+  onRespuesta: (v: 'SI' | 'NO') => void
+}) {
+  const quiero = confirm[0]
+  const plato = confirm[confirm.length - 1]
+  const altavoz = (
+    <button
+      type="button"
+      onClick={() => decir(pregunta)}
+      aria-label={`Escuchar: ${pregunta}`}
+      className="grid size-24 shrink-0 place-items-center rounded-pildora border-4 border-tinta bg-maiz text-tinta shadow-suave-sm active:translate-y-1 active:shadow-none"
+    >
+      <IconoAltavoz className="size-11" />
+    </button>
+  )
+  return (
+    <div className="flex h-dvh flex-col overflow-hidden bg-crema">
+      <EncabezadoRol seat={seat} />
+      <main className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 px-4 pt-3 bajo:gap-2 bajo:pt-2">
+        <section aria-live="polite" className="flex w-full max-w-4xl items-center justify-center gap-6 max-sm:flex-col max-sm:gap-5">
+          <Personaje rol={ia} className="h-24 w-20 bajo:h-16 bajo:w-14 sm:h-40 sm:w-32 lg:h-56 lg:w-44" />
+          <div className="@container relative w-full max-w-[44rem] min-w-0 rounded-tarjeta border-4 border-tinta bg-blanco p-4 shadow-suave sm:flex-1 lg:p-6">
+            {/* Pico hacia la vendedora: arriba en teléfono, a la izquierda desde sm */}
+            <span
+              aria-hidden
+              className="absolute size-8 rotate-45 border-tinta bg-blanco max-sm:-top-[18px] max-sm:left-1/2 max-sm:-ml-4 max-sm:border-t-4 max-sm:border-l-4 sm:top-1/2 sm:-left-[18px] sm:-mt-4 sm:border-b-4 sm:border-l-4"
+            />
+            <div className="flex items-center justify-center gap-3 sm:gap-4">
+              <ol className="flex min-w-0 flex-1 items-center justify-center gap-2" aria-label={pregunta}>
+                {/* QUIERO mide 88 px como mínimo: su etiqueta no baja de 16 px */}
+                <li className="relative w-[clamp(5.5rem,26cqw,9rem)] shrink-0">
+                  <PictoFluido picto={quiero} className="aspect-[5/6]" />
+                  {/* La pregunta va en el sello, no en la etiqueta */}
+                  <span
+                    aria-hidden
+                    className="absolute -top-5 right-1 grid size-11 place-items-center rounded-full border-4 border-tinta bg-maiz font-titulo text-2xl font-black text-tinta"
+                  >
+                    ?
+                  </span>
+                </li>
+                <li aria-hidden className="shrink-0 font-titulo text-3xl font-black">
+                  +
+                </li>
+                <li className="max-w-64 min-w-0 flex-1">
+                  <PictoFluido picto={plato} className="aspect-square" />
+                </li>
+              </ol>
+              <div className="max-sm:hidden">{altavoz}</div>
+            </div>
+          </div>
+        </section>
+        <div className="sm:hidden">{altavoz}</div>
+      </main>
+      <footer className="shrink-0 px-4 pt-3 pb-4 bajo:pt-2 bajo:pb-3 sm:pb-6">
+        <div className="mx-auto flex max-w-2xl justify-center">
+          <BotonSiNo onRespuesta={onRespuesta} />
+        </div>
+      </footer>
+    </div>
   )
 }
 
@@ -263,7 +342,7 @@ function TarjetaOpcion({
 
   const marco = {
     normal: 'border-tinta',
-    resaltar: 'border-tinta ring-8 ring-naranja',
+    resaltar: 'border-tinta ring-8 ring-maiz',
     mostrar: 'border-tinta ring-8 ring-verde',
     ok: 'border-verde',
     no: 'border-tinta border-dashed',
@@ -304,8 +383,8 @@ function Insignia({ estado }: { estado: Estado }) {
   switch (estado) {
     case 'resaltar':
       return (
-        <span className={`${base} bg-maiz text-tinta`} aria-hidden>
-          <IconoMira className="size-7" />
+        <span className={`${base} bg-naranja text-tinta`} aria-hidden>
+          <IconoAyuda className="size-7" />
         </span>
       )
     case 'mostrar':
