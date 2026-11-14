@@ -58,7 +58,7 @@ class Summary(_Mensaje):
 # ------------------------------------------------------------------
 class Join(_Mensaje):
     type: Literal["join"]
-    alias: str = Field(min_length=1, max_length=20)
+    alias: str = Field(default="", max_length=20)   # opcional: el nombre no es obligatorio
     avatar: str                 # id de un ingrediente
     seat_token: str | None = None
 

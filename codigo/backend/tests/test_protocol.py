@@ -7,12 +7,14 @@ from backend.app.game.protocol import Hint, Join, Round, Tap, mensaje_cliente
 def test_discrimina_mensajes_del_cliente():
     assert isinstance(mensaje_cliente.validate_json('{"type":"tap","option_id":"pan","ms":3400}'), Tap)
     assert isinstance(mensaje_cliente.validate_json('{"type":"join","alias":"Ana","avatar":"manzana"}'), Join)
+    # el nombre es opcional en la pantalla de inicio (solo alias, Ley 29733)
+    assert isinstance(mensaje_cliente.validate_json('{"type":"join","alias":"","avatar":"manzana"}'), Join)
 
 
 @pytest.mark.parametrize("texto", [
     '{"type":"tap","option_id":"pan","ms":-1}',            # ms negativo
     '{"type":"answer","value":"QUIZAS"}',                  # solo SI / NO
-    '{"type":"join","alias":"","avatar":"pan"}',           # alias vacío
+    '{"type":"join","alias":"aaaaaaaaaaaaaaaaaaaaa","avatar":"pan"}',  # alias de más de 20
     '{"type":"help","extra":1}',                           # campos de más
     '{"type":"borrar_todo"}',                              # tipo desconocido
 ])
