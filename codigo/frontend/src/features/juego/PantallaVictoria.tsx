@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 import { Pictograma } from '../../components/Pictograma'
 import { nuevaPartida } from '../../lib/socket'
 import { decir } from '../../lib/tts'
-import { Atribucion } from './Atribucion'
 import { useJuego } from './store'
 
 /** Final de la partida. Con victory=false se muestra la receta con cariño: nunca "perdiste". */
@@ -67,7 +66,6 @@ export function PantallaVictoria() {
           JUGAR OTRA VEZ
         </button>
       </main>
-      <Atribucion className="text-blanco" />
     </div>
   )
 }

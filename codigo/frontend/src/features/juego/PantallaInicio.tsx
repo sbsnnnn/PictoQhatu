@@ -3,7 +3,6 @@ import { IconoAltavoz, IconoPlay } from '../../components/Iconos'
 import type { MensajeCliente } from '../../lib/protocol'
 import { leerToken } from '../../lib/socket'
 import { desbloquearVoz } from '../../lib/tts'
-import { Atribucion } from './Atribucion'
 import { useJuego } from './store'
 
 // Frutas ARASAAC sobre el mostrador del puesto. Posición en % del viewBox 560×420 de puesto.svg.
@@ -19,7 +18,7 @@ function Onda({ abajo = false }: { abajo?: boolean }) {
     ? 'M0 0h1200v40C1000 70 800 0 600 30S200 70 0 40z' // borde inferior de la banda de arriba
     : 'M0 0h1200v40C1000 10 800 70 600 40S150 0 0 50z' // borde superior de la banda de abajo
   return (
-    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" className={`absolute inset-x-0 h-12 w-full sm:h-16 ${abajo ? 'bottom-0 rotate-180' : 'top-0'}`} aria-hidden>
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" className={`absolute inset-x-0 h-12 w-full sm:h-16 ${abajo ? '-bottom-px rotate-180' : '-top-px'}`} aria-hidden>
       <path d={d} className="fill-crema" />
     </svg>
   )
@@ -73,13 +72,11 @@ export function PantallaInicio({ enviar }: { enviar: (m: MensajeCliente) => void
         </button>
       </main>
 
-      {/* Banda índigo con la atribución ARASAAC (blanco sobre índigo 7.0:1) */}
-      <footer className="textil relative shrink-0 bg-indigo pt-14 sm:pt-16">
+      <footer className="textil relative h-20 shrink-0 bg-indigo sm:h-28">
         <Onda />
         <svg viewBox="0 0 1200 80" preserveAspectRatio="none" className="absolute inset-x-0 top-1 h-12 w-full sm:h-16" aria-hidden>
           <path d="M0 58C150 8 400 52 600 46S1000 18 1200 48" fill="none" strokeWidth="8" className="stroke-maiz" />
         </svg>
-        <Atribucion className="relative text-blanco" />
       </footer>
     </div>
   )

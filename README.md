@@ -34,4 +34,4 @@ Pruebas: `pytest` y `ruff check .` desde `codigo/`; `npm run build` y `npm run l
 
 ## Créditos
 
-Pictogramas: Sergio Palao. Origen: ARASAAC (https://arasaac.org). Licencia: CC BY-NC-SA. Propiedad: Gobierno de Aragón (España).
+Pictogramas: Sergio Palao. Origen: ARASAAC (arasaac.org). Licencia: CC BY-NC-SA. Propiedad: Gobierno de Aragón (España).
