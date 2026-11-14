@@ -41,3 +41,9 @@ export const IconoMira = ({ className = 'size-8' }: { className?: string }) => (
     <path d="M12 3v15M5.5 11.5L12 18l6.5-6.5" />
   </svg>
 )
+
+export const IconoPlay = ({ className = 'size-9' }: { className?: string }) => (
+  <svg {...base} strokeWidth={2} className={className}>
+    <path d="M8 5.5v13l10.5-6.5z" fill="currentColor" />
+  </svg>
+)
