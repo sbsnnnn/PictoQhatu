@@ -9,6 +9,7 @@ import { EncabezadoRol } from '../../components/EncabezadoRol'
 import { FrasePictos } from '../../components/FrasePictos'
 import { IconoCheck, IconoCruz, IconoMira } from '../../components/Iconos'
 import { Personaje } from '../../components/Personaje'
+import { Plato } from '../../components/Plato'
 import { TarjetaPaso } from '../../components/TarjetaPaso'
 import { ImagenPicto, Pictograma } from '../../components/Pictograma'
 import type { MensajeCliente, Option, Picto } from '../../lib/protocol'
@@ -98,6 +99,7 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
 
   const ia = seat === 'cliente' ? 'vendedor' : 'cliente'
   const canasta = useJuego((s) => s.canasta)
+  const plato = useJuego((s) => s.plato)
 
   // Burbuja: el cliente ve la pregunta o el prompt; el vendedor, el pedido de la IA clienta
   const vendedor = seat === 'vendedor'
@@ -105,6 +107,7 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
   if (confirm) burbuja = comoPregunta(confirm)
   // El paso que se prepara ahora ([PONER] + [POLLO]) va aparte, en su tarjeta
   const paso = vendedor && round && !confirm ? round.prompt : null
+  const hecho = vendedor && !!feedback?.ok && !!feedback.option_id
   const pista = !feedback && !confirm && round?.hint?.action === 'a5' ? round.hint.speech : ''
 
   // Mismo tamaño de etiqueta en todas las tarjetas de la ronda: lo fija la palabra más larga
@@ -124,10 +127,19 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
       <main className="flex min-h-0 flex-1 flex-col gap-3 px-4 pt-3 bajo:gap-2 bajo:pt-2 lg:grid lg:grid-cols-[minmax(15rem,22rem)_minmax(0,1fr)_minmax(10rem,13rem)] lg:grid-rows-[minmax(0,1fr)] lg:gap-x-6 lg:px-6 lg:pt-4">
         <div className="flex shrink-0 flex-col gap-5 lg:min-h-0 lg:justify-center">
           <section aria-live="polite" className="flex items-center gap-5 lg:flex-col lg:items-start">
-            <Personaje rol={ia} className="h-24 w-14 bajo:h-14 bajo:w-10 lg:ml-6 lg:h-36 lg:w-28" />
+            <div className="flex shrink-0 items-center gap-6 lg:ml-6">
+              <Personaje rol={ia} className="h-24 w-14 bajo:h-14 bajo:w-10 lg:h-36 lg:w-28" />
+              {/* Vendedor en tablet horizontal: la respuesta del cliente va junto a él y la burbuja sigue con el pedido */}
+              {vendedor && feedback?.option_id && <Respuesta ok={feedback.ok} className="max-lg:hidden" />}
+            </div>
             <Burbuja className={`min-w-0 flex-1 lg:w-full lg:flex-none ${burbuja.length || feedback ? '' : 'invisible'}`}>
+              {vendedor && feedback?.option_id && (
+                <div className="max-lg:hidden">
+                  <FrasePictos pictos={burbuja} />
+                </div>
+              )}
               {feedback ? (
-                <div className="flex min-w-0 items-center gap-3">
+                <div className={`flex min-w-0 items-center gap-3 ${vendedor && feedback.option_id ? 'lg:hidden' : ''}`}>
                   <Sello ok={feedback.ok} />
                   {feedback.npc.length > 0 && (
                     <div className="w-24 shrink-0 lg:w-28">
@@ -141,7 +153,7 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
               )}
             </Burbuja>
           </section>
-          {paso && <TarjetaPaso pictos={paso} className="max-lg:hidden" />}
+          {paso && <TarjetaPaso pictos={paso} hecho={hecho} className="max-lg:hidden" />}
         </div>
 
         {/* Tarjetas de tamaño fijo (proporción 220×244) que se achican solo si no caben; nunca se estiran */}
@@ -163,9 +175,19 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
           )}
         </div>
 
-        {/* Panel: la canasta del cliente; en una columna, el paso del vendedor (misma altura: las tarjetas miden igual) */}
+        {/* Panel: la canasta del cliente o el plato del vendedor. En una columna, el vendedor ve aquí su paso
+            (misma altura que la canasta: las tarjetas miden igual en los dos roles) */}
         <div className="flex h-24 shrink-0 items-center justify-center bajo:h-16 lg:h-auto lg:self-center">
-          {vendedor ? paso && <TarjetaPaso pictos={paso} className="h-full w-full max-w-md lg:hidden" /> : <Canasta pictos={canasta} />}
+          {vendedor ? (
+            <>
+              {paso && <TarjetaPaso pictos={paso} hecho={hecho} className="h-full w-full max-w-md lg:hidden" />}
+              <div className="w-full max-lg:hidden">
+                <Plato pictos={plato} recien={hecho} />
+              </div>
+            </>
+          ) : (
+            <Canasta pictos={canasta} />
+          )}
         </div>
       </main>
 
@@ -184,6 +206,16 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
         </div>
       </footer>
     </div>
+  )
+}
+
+/** ✓ ¡SÍ! (verde) o ✗ NO (tinta) junto al cliente: ícono + palabra, nunca solo color. */
+function Respuesta({ ok, className = '' }: { ok: boolean; className?: string }) {
+  return (
+    <p className={`flex flex-col items-center font-titulo text-4xl font-black ${ok ? 'text-verde' : 'text-tinta'} ${className}`}>
+      {ok ? <IconoCheck className="size-12" /> : <IconoCruz className="size-12" />}
+      {ok ? '¡SÍ!' : 'NO'}
+    </p>
   )
 }
 
@@ -237,7 +269,7 @@ function TarjetaOpcion({
     normal: 'border-tinta',
     resaltar: 'border-tinta ring-8 ring-naranja',
     mostrar: 'border-tinta ring-8 ring-verde',
-    ok: 'border-tinta ring-8 ring-verde',
+    ok: 'border-verde',
     no: 'border-tinta border-dashed',
   }[estado]
   const extra = { normal: '', resaltar: ', mira aquí', mostrar: ', esta es', ok: ', bien', no: ', otra vez' }[estado]
@@ -288,7 +320,7 @@ function Insignia({ estado }: { estado: Estado }) {
       )
     case 'ok':
       return (
-        <span className={`${base} bg-verde text-blanco`} aria-hidden>
+        <span className="absolute -top-4 right-2 grid size-14 place-items-center rounded-full border-4 border-tinta bg-verde text-blanco" aria-hidden>
           <IconoCheck className="size-8" />
         </span>
       )
