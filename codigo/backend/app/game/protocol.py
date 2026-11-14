@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 Seat = Literal["cliente", "vendedor"]
 
 # Códigos de cierre del WebSocket (el cliente no reintenta con ninguno de los dos)
-CIERRE_SALA_OCUPADA = 1008      # otro jugador ya tiene la sala
+CIERRE_SALA_OCUPADA = 4002      # otro jugador ya tiene la sala (no 1008: un proxy también lo usa)
 CIERRE_REEMPLAZADA = 4001       # el mismo asiento se abrió en otra pestaña o dispositivo
 Fase = Literal[1, 2, 3]
 

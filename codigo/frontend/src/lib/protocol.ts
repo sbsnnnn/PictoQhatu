@@ -4,7 +4,7 @@
 export type Seat = 'cliente' | 'vendedor'
 
 // Códigos de cierre del WebSocket (el cliente no reintenta con ninguno de los dos)
-export const CIERRE_SALA_OCUPADA = 1008 // otro jugador ya tiene la sala
+export const CIERRE_SALA_OCUPADA = 4002 // otro jugador ya tiene la sala (no 1008: un proxy también lo usa)
 export const CIERRE_REEMPLAZADA = 4001 // el mismo asiento se abrió en otra pestaña o dispositivo
 export type Fase = 1 | 2 | 3
 
