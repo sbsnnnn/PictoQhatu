@@ -4,7 +4,7 @@ import pytest
 from fastapi.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
 
-from backend.app.game.protocol import CIERRE_REEMPLAZADA
+from backend.app.game.protocol import CIERRE_REEMPLAZADA, CIERRE_SALA_OCUPADA
 from backend.app.game.session import option_id
 from backend.app.main import create_app
 
@@ -80,8 +80,9 @@ def test_segundo_humano_sin_token_recibe_error(app):
         with client.websocket_connect("/ws/sala4") as ws:
             ws.send_json(JOIN)
             assert ws.receive_json()["type"] == "error"
-            with pytest.raises(WebSocketDisconnect):
+            with pytest.raises(WebSocketDisconnect) as cierre:
                 ws.receive_json()
+            assert cierre.value.code == CIERRE_SALA_OCUPADA
 
 
 def test_la_ultima_conexion_con_el_token_reemplaza_a_la_anterior(app):

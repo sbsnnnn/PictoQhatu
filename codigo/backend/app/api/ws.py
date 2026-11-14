@@ -2,6 +2,7 @@
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from pydantic import ValidationError
+from starlette.websockets import WebSocketDisconnected
 
 from backend.app.game.protocol import (
     CIERRE_REEMPLAZADA,
@@ -40,7 +41,8 @@ async def ws_sala(ws: WebSocket, sala_id: str):
             try:
                 texto = await ws.receive_text()
                 if sala is not None and sala.conexion is not ws:
-                    return               # otra pestaña tomó el asiento: esta ya no juega
+                    await _cerrar(ws, CIERRE_REEMPLAZADA)   # otra pestaña tomó el asiento; sin cierre propio
+                    return                                  # el cliente lo tomaría como corte y reintentaría
                 msg = mensaje_cliente.validate_json(texto)
             except ValidationError:
                 await _enviar(ws, [Error(message="Mensaje inválido")])
@@ -68,7 +70,7 @@ async def ws_sala(ws: WebSocket, sala_id: str):
             elif isinstance(msg, Answer):
                 respuesta = sesion.answer(msg.value)
             await _enviar(ws, respuesta)
-    except WebSocketDisconnect:
+    except (WebSocketDisconnect, WebSocketDisconnected):   # el 2.º: la cerró otra pestaña al enviar
         pass                     # la sala sigue en memoria: el jugador puede volver con su seat_token
     finally:
         if sala is not None and sala.conexion is ws:
