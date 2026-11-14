@@ -1,0 +1,41 @@
+// Diagrama de arquitectura del prototipo del Hito 2. Generar con: dot -Tpng -Gdpi=200 arquitectura.dot -o fig_arquitectura.png
+digraph G {
+  rankdir=TB; nodesep=0.25; ranksep=0.5; newrank=true;
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=14, color="#1F1A2E", penwidth=1.4, margin="0.15,0.08"];
+  edge [fontname="Arial", fontsize=12, color="#1F1A2E"];
+
+  subgraph cluster_front {
+    label="Navegador (tablet): React + TypeScript"; fontname="Arial Bold"; fontsize=14; style="rounded"; color="#3F4FB8"; labeljust="l";
+    ui  [label="Pantallas CAA\n(inicio, cliente, vendedor,\nayuda, confirmación, victoria)", fillcolor="#FFF8EC"];
+    st  [label="Estado de la partida\n(Zustand)", fillcolor="#FFF8EC"];
+    tts [label="Voz en español\n(Web Speech API)", fillcolor="#FFF8EC"];
+    ui -> st [dir=both]; ui -> tts;
+  }
+
+  subgraph cluster_back {
+    label="Backend en un proceso: FastAPI + Uvicorn"; fontname="Arial Bold"; fontsize=14; style="rounded"; color="#9E1B32"; labeljust="l"; labelloc="b";
+    ws   [label="/ws/{sala}\nprotocolo JSON", fillcolor="#FFFFFF"];
+    sala [label="RoomManager\nsalas en memoria,\nreconexión por seat_token", fillcolor="#FFFFFF"];
+    ses  [label="GameSession\nModo A → confirmación → Modo B", fillcolor="#FFFFFF"];
+    ws -> sala -> ses;
+  }
+
+  subgraph cluster_ia {
+    label="ia_models (Python puro)"; fontname="Arial Bold"; fontsize=14; style="rounded"; color="#15803D"; labeljust="l"; labelloc="b";
+    env  [label="Entorno\nestado s' = (f, e, h, t, u)", fillcolor="#FFC72C"];
+    q    [label="Tabla Q 162 × 6\n(solo lectura)", fillcolor="#FFC72C"];
+    id3  [label="ID3\nopciones y pista a5", fillcolor="#FFC72C"];
+    ast  [label="A*\nsiguiente paso válido", fillcolor="#FFC72C"];
+    env -> id3; env -> ast;
+  }
+
+  datos [label="datos/\npictos.json, platos.json,\ntabla_q.npy", shape=cylinder, fillcolor="#FFFFFF"];
+  {rank=same; ws; sala; ses}
+  {rank=same; env; q; datos}
+
+  st -> ws  [label=" tap, help, answer"];
+  ws -> st  [label=" round, feedback, confirm,\n role_swap, game_over", style=dashed];
+  ses -> env [label=" nueva_ronda / paso"];
+  ses -> q   [label=" elige la ayuda a0–a5"];
+  datos -> q [style=dotted];
+}
