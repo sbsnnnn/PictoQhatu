@@ -1,84 +1,73 @@
-import { useState } from 'react'
-import { IconoCheck } from '../../components/Iconos'
-import { ImagenPicto } from '../../components/Pictograma'
-import type { MensajeCliente, Picto } from '../../lib/protocol'
+import puesto from '../../assets/ilustraciones/puesto.svg'
+import { IconoAltavoz, IconoPlay } from '../../components/Iconos'
+import { Onda } from '../../components/Onda'
+import type { MensajeCliente } from '../../lib/protocol'
 import { leerToken } from '../../lib/socket'
 import { desbloquearVoz } from '../../lib/tts'
-import { Atribucion } from './Atribucion'
 import { useJuego } from './store'
 
-// Avatar = un picto de ingrediente (no se guardan datos personales, §2). Máximo 4 opciones.
-const AVATARES: Picto[] = [
-  { id: 'manzana', label: 'MANZANA', img: '/pictos/manzana.png' },
-  { id: 'platano', label: 'PLÁTANO', img: '/pictos/platano.png' },
-  { id: 'pan', label: 'PAN', img: '/pictos/pan.png' },
-  { id: 'queso', label: 'QUESO', img: '/pictos/queso.png' },
+// Frutas ARASAAC sobre el mostrador del puesto. Posición en % del viewBox 560×420 de puesto.svg.
+const FRUTAS = [
+  { id: 'manzana', v: 2462, left: 24.5, top: 59, width: 8.5 },
+  { id: 'platano', v: 2530, left: 66.5, top: 58, width: 9.5 },
+  { id: 'naranja', v: 2483, left: 84, top: 45.5, width: 7.5 },
 ]
 
 export function PantallaInicio({ enviar }: { enviar: (m: MensajeCliente) => void }) {
-  const [alias, setAlias] = useState('')
-  const [avatar, setAvatar] = useState(AVATARES[0].id)
-
   const jugar = () => {
     desbloquearVoz() // primer toque: los navegadores solo permiten la voz después de un gesto
     useJuego.setState({ aviso: 'Vamos a jugar' }) // se dice antes del primer prompt; suelto, el prompt lo cortaba
-    enviar({ type: 'join', alias: alias.trim().slice(0, 20), avatar, seat_token: leerToken() })
+    // Sin nombre ni dibujo (§2: no se piden datos del jugador); avatar fijo hasta el modo cooperativo
+    enviar({ type: 'join', alias: '', avatar: 'manzana', seat_token: leerToken() })
   }
 
   return (
-    <div className="flex min-h-dvh flex-col bg-qhatu text-blanco">
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-8 px-4 py-8">
-        <h1 className="text-center text-6xl font-black tracking-tight sm:text-7xl">PictoQhatu</h1>
-        <p className="text-center text-2xl">El puesto de comida del mercado</p>
+    <div className="flex h-dvh flex-col overflow-hidden bg-crema">
+      <header className="textil relative shrink-0 bg-qhatu px-4 pt-10 pb-20 sm:pb-24">
+        <h1 className="text-center text-6xl leading-none font-black tracking-tight sm:text-8xl">
+          <span className="text-blanco">Picto</span>
+          <span className="text-maiz">Qhatu</span>
+        </h1>
+        <Onda abajo />
+      </header>
 
-        <div className="flex w-full flex-col gap-5 rounded-tarjeta border-4 border-tinta bg-crema p-5 text-tinta shadow-bloque sm:p-7">
-          <label className="flex flex-col gap-2 text-2xl font-bold">
-            Tu nombre (si quieres)
-            <input
-              value={alias}
-              onChange={(e) => setAlias(e.target.value)}
-              maxLength={20}
-              autoComplete="off"
-              className="min-h-16 rounded-pildora border-4 border-tinta bg-blanco px-5 text-2xl"
-            />
-          </label>
-
-          <fieldset className="flex flex-col gap-3">
-            <legend className="mb-2 text-2xl font-bold">Elige tu dibujo</legend>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {AVATARES.map((p) => {
-                const elegido = p.id === avatar
-                return (
-                  <button
-                    key={p.id}
-                    type="button"
-                    aria-pressed={elegido}
-                    onClick={() => setAvatar(p.id)}
-                    className={`relative flex min-h-32 flex-col items-center justify-center gap-1 rounded-tarjeta border-4 border-tinta bg-blanco p-2 ${elegido ? 'ring-8 ring-maiz' : ''}`}
-                  >
-                    <ImagenPicto picto={p} className="h-16 w-full" />
-                    <span className="text-2xl font-bold">{p.label}</span>
-                    {elegido && (
-                      <span className="absolute -top-3 -right-3 grid size-11 place-items-center rounded-pildora border-4 border-tinta bg-verde text-blanco">
-                        <IconoCheck className="size-6" />
-                      </span>
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-          </fieldset>
+      <main className="flex min-h-0 flex-1 flex-col items-center gap-4 px-4">
+        {/* El puesto ocupa el alto que sobra y mantiene 4:3 (cqw/cqh: unidades del contenedor).
+            En móvil el SVG trae ~4% de aire por lado: se le quita el padding de main para que el dibujo quede a ~16 px del borde */}
+        <div className="grid min-h-0 w-[calc(100%+2rem)] flex-1 place-items-center pt-2 sm:w-full" style={{ containerType: 'size' }}>
+          <div className="relative aspect-[4/3] w-[min(100cqw,133cqh,36rem)]">
+            <img src={puesto} alt="Puesto de comida del mercado con una vendedora" className="absolute inset-0 size-full" />
+            {FRUTAS.map((f) => (
+              <img
+                key={f.id}
+                src={`/pictos/${f.id}.png?v=${f.v}`}
+                alt=""
+                className="absolute aspect-square object-contain"
+                style={{ left: `${f.left}%`, top: `${f.top}%`, width: `${f.width}%` }}
+              />
+            ))}
+          </div>
         </div>
 
         <button
           type="button"
           onClick={jugar}
-          className="min-h-28 w-full max-w-md rounded-pildora border-4 border-tinta bg-maiz px-10 font-titulo text-5xl font-black text-tinta shadow-bloque active:translate-y-1.5 active:shadow-none"
+          className="relative z-10 -mb-8 flex min-h-28 shrink-0 w-full max-w-md items-center justify-center gap-5 rounded-pildora border-4 border-tinta bg-maiz px-6 font-titulo text-5xl font-black text-tinta shadow-bloque active:translate-y-1.5 active:shadow-none sm:text-6xl"
         >
+          <span className="grid size-16 shrink-0 place-items-center rounded-pildora bg-tinta text-maiz sm:size-20" aria-hidden>
+            <IconoPlay className="size-10 translate-x-0.5 sm:size-12" />
+          </span>
           JUGAR
+          <IconoAltavoz className="size-10 shrink-0 sm:size-12" />
         </button>
       </main>
-      <Atribucion className="text-blanco" />
+
+      <footer className="textil relative h-20 shrink-0 bg-indigo sm:h-28">
+        <Onda />
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" className="absolute inset-x-0 top-1 h-12 w-full sm:h-16" aria-hidden>
+          <path d="M0 58C150 8 400 52 600 46S1000 18 1200 48" fill="none" strokeWidth="8" className="stroke-maiz" />
+        </svg>
+      </footer>
     </div>
   )
 }

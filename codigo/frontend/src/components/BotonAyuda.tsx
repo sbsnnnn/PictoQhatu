@@ -1,13 +1,13 @@
 import { IconoAyuda } from './Iconos'
 
-export function BotonAyuda({ onClick }: { onClick: () => void }) {
+export function BotonAyuda({ onClick, className = '' }: { onClick: () => void; className?: string }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="flex min-h-24 items-center gap-3 rounded-pildora border-4 border-tinta bg-naranja px-7 font-titulo text-3xl font-black text-tinta shadow-bloque active:translate-y-1.5 active:shadow-none"
+      className={`flex min-h-24 min-w-0 items-center bajo:min-h-[4.5rem] justify-center gap-2 rounded-pildora border-4 border-tinta bg-naranja px-3 font-titulo text-[1.65rem] sm:gap-4 sm:px-7 sm:text-4xl font-black text-tinta shadow-suave active:translate-y-1.5 active:shadow-none ${className}`}
     >
-      <IconoAyuda className="size-11" />
+      <IconoAyuda className="size-9 shrink-0 sm:size-12" />
       AYUDA
     </button>
   )

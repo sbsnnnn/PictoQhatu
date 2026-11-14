@@ -26,6 +26,7 @@ Pruebas: `pytest` y `ruff check .` desde `codigo/`; `npm run build` y `npm run l
 - **Las salas viven en memoria y no sobreviven a un reinicio del servidor.** Si el servidor se reinicia a mitad de una partida, la pestaña se reconecta sola y empieza una partida nueva desde el inicio.
 - Un asiento se juega desde una sola pestaña. Si se abre en otra (mismo `seat_token`), la nueva toma la partida y la anterior muestra "Sigues jugando en otra pestaña".
 - El pictograma de `arroz_con_pollo` es una paella con pollo (ARASAAC 27945): ARASAAC no tiene el plato peruano.
+- La interfaz está pensada para tablets. En un teléfono de 360×640 las etiquetas de las cartas bajan a 11 px (24 px o más en tablet) y los botones inferiores miden 72 px.
 - El pictograma de PREPARAR (ARASAAC 6190, dos manos con flechas) es abstracto. Hay que validarlo con Kallpa; la alternativa a probar es 38707 ("servir").
 
 ## Pendiente para el Hito 3
@@ -34,4 +35,4 @@ Pruebas: `pytest` y `ruff check .` desde `codigo/`; `npm run build` y `npm run l
 
 ## Créditos
 
-Pictogramas: Sergio Palao. Origen: ARASAAC (https://arasaac.org). Licencia: CC BY-NC-SA. Propiedad: Gobierno de Aragón (España).
+Pictogramas: Sergio Palao. Origen: ARASAAC (arasaac.org). Licencia: CC BY-NC-SA. Propiedad: Gobierno de Aragón (España).

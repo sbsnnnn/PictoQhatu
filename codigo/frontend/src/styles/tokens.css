@@ -19,6 +19,9 @@
   /* Sombra "de bloque": desplazada y sin difuminar, como una pieza encajada */
   --shadow-bloque: 0 6px 0 0 var(--color-tinta);
   --shadow-bloque-sm: 0 3px 0 0 var(--color-tinta);
+  /* Sombra de bloque suave del área de juego (tarjetas, burbuja, barra inferior) */
+  --shadow-suave: 0 8px 0 0 rgb(31 26 46 / 0.2);
+  --shadow-suave-sm: 0 5px 0 0 rgb(31 26 46 / 0.2);
 
   /* Objetivo táctil mínimo en el juego (§2) */
   --spacing-toque: 96px;

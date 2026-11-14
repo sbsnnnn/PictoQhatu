@@ -3,9 +3,9 @@ import { IconoCheck, IconoCruz } from './Iconos'
 /** [SÍ] verde con ✓ y [NO] en tinta con ✗: el NO nunca es rojo de alarma. */
 export function BotonSiNo({ onRespuesta }: { onRespuesta: (v: 'SI' | 'NO') => void }) {
   const comun =
-    'flex min-h-24 min-w-40 items-center justify-center gap-3 rounded-pildora border-4 border-tinta px-8 font-titulo text-4xl font-black text-blanco shadow-bloque active:translate-y-1.5 active:shadow-none'
+    'flex min-h-24 min-w-0 flex-1 items-center bajo:min-h-[4.5rem] lg:min-w-48 lg:flex-none justify-center gap-3 rounded-pildora border-4 border-tinta px-8 font-titulo text-4xl font-black text-blanco shadow-bloque active:translate-y-1.5 active:shadow-none'
   return (
-    <div className="flex gap-4">
+    <div className="flex w-full gap-3 lg:w-auto lg:gap-8">
       <button type="button" onClick={() => onRespuesta('SI')} className={`${comun} bg-verde`}>
         <IconoCheck className="size-10" />
         SÍ

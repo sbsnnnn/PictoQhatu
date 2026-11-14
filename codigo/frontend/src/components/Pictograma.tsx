@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
+import { anchoEm } from '../lib/etiqueta'
 import type { Picto } from '../lib/protocol'
 
 /** Imagen del picto; si falta o no carga, no se dibuja nada (la etiqueta siempre está). */
@@ -16,33 +17,29 @@ export function ImagenPicto({ picto, className = '' }: { picto: Picto; className
   )
 }
 
-interface Props {
-  picto: Picto
-  /** "md" para frases y resúmenes; "sm" para listas largas */
-  tamano?: 'sm' | 'md'
-}
-
-/** Tarjeta crema con borde tinta: imagen + etiqueta en MAYÚSCULAS. El id "?" es la casilla vacía. */
-export function Pictograma({ picto, tamano = 'md' }: Props) {
-  // Ancho mínimo y no fijo: las etiquetas largas (ZANAHORIA) no se cortan
-  const caja = tamano === 'md' ? 'min-w-28 h-32 sm:min-w-32 sm:h-36' : 'min-w-24 h-28'
+/**
+ * Picto que se ajusta al ancho de su contenedor (@container: burbuja o tarjeta de paso).
+ * El alto lo fija `className`. La etiqueta deja 6 px de margen por lado y se ajusta a su ancho real
+ * (lib/etiqueta.ts) para no tocar el borde, hasta 24 px.
+ */
+export function PictoFluido({ picto, className = '' }: { picto: Picto; className?: string }) {
+  const caja = `@container flex w-full flex-col items-center justify-center rounded-2xl border-4 border-tinta bg-blanco ${className}`
   if (picto.id === '?') {
     return (
-      <div
-        role="img"
-        aria-label="casilla vacía"
-        className={`${caja} grid shrink-0 place-items-center rounded-tarjeta border-4 border-dashed border-tinta bg-blanco font-titulo text-6xl font-black text-tinta`}
-      >
+      <div role="img" aria-label="casilla vacía" className={`${caja} border-dashed font-titulo text-[min(3.5rem,45cqw)] font-black`}>
         ?
       </div>
     )
   }
   return (
-    <div
-      className={`${caja} flex shrink-0 flex-col items-center justify-center gap-1 rounded-tarjeta border-4 border-tinta bg-blanco p-2 shadow-bloque-sm`}
-    >
+    <div className={`${caja} gap-0.5 py-1`}>
       <ImagenPicto picto={picto} className="w-full flex-1" />
-      <span className="text-center text-2xl leading-tight font-bold uppercase">{picto.label}</span>
+      <span
+        style={{ '--em': anchoEm(picto.label) } as CSSProperties}
+        className="w-full px-1.5 text-center text-[min(1.5rem,calc((100cqw-0.75rem)/var(--em)))] leading-tight font-bold whitespace-nowrap uppercase"
+      >
+        {picto.label}
+      </span>
     </div>
   )
 }

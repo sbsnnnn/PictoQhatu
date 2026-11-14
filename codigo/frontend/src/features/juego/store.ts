@@ -14,6 +14,10 @@ export interface EstadoJuego {
   confirm: Picto[] | null
   /** Lo que pide la IA clienta en el Modo B; queda a la vista mientras el jugador prepara. */
   pedido: Picto[] | null
+  /** MI CANASTA: ingredientes que el servidor aceptó en la fase 1 (el front no decide aciertos). */
+  canasta: Picto[]
+  /** EL PLATO del vendedor: lo que el servidor aceptó en el tramo B (se vacía al empezar la fase 3). */
+  plato: Picto[]
   /** Frase que se dice una vez antes del próximo prompt (cambio de rol o de fase). */
   aviso: string | null
   /** Aviso que acompaña a la ronda actual (se dice antes de su prompt). */
@@ -34,19 +38,30 @@ function aplicar(s: EstadoJuego, m: MensajeServidor): Partial<EstadoJuego> {
       return { seat: m.seat, pantalla: 'juego' }
     case 'round':
       return { round: m, seat: m.seat, phase: m.phase, confirm: null, pantalla: 'juego', avisoRonda: s.aviso, aviso: null }
-    case 'feedback':
-      return { feedback: m }
+    case 'feedback': {
+      // shortcut: la canasta vive en el navegador; tras recargar la pestaña empieza vacía hasta el próximo acierto
+      if (!m.option_id) return { feedback: m, canasta: [] } // [NO] en la confirmación: el pedido empieza de nuevo
+      const opcion = m.ok ? s.round?.options.find((o) => o.id === m.option_id) : undefined
+      if (!opcion) return { feedback: m }
+      // Fase 1: el ingrediente pedido. Fases 2 y 3: el último picto del paso ([PONER, pollo] → pollo; [MEZCLAR])
+      if (s.round?.phase === 1) return { feedback: m, canasta: [...s.canasta, opcion.pictos[0]] }
+      return { feedback: m, plato: [...s.plato, opcion.pictos[opcion.pictos.length - 1]] }
+    }
     case 'confirm':
       return { confirm: m.prompt }
     case 'role_swap':
+      // Al reconectar en el Modo B el servidor reenvía el role_swap: mismo asiento, no se borra lo ya armado
+      if (s.seat === m.seat) return { pedido: m.order }
       return {
         seat: m.seat,
         round: null,
+        canasta: [],
+        plato: [],
         pedido: m.order,
         aviso: `${m.seat === 'vendedor' ? 'Ahora tú preparas la comida' : 'Ahora tú pides la comida'}. ${textoFrase(m.order)}`,
       }
     case 'phase_change':
-      return { phase: m.phase, round: null, aviso: m.phase === 3 ? 'Ahora arma el plato tú solo' : null }
+      return { phase: m.phase, round: null, plato: m.phase === 3 ? [] : s.plato, aviso: m.phase === 3 ? 'Ahora arma el plato tú solo' : null }
     case 'game_over':
       return { pantalla: 'final', victory: m.victory, summary: m.summary }
     case 'error':
@@ -64,6 +79,8 @@ export const useJuego = create<EstadoJuego>()((set, get) => ({
   feedback: null,
   confirm: null,
   pedido: null,
+  canasta: [],
+  plato: [],
   aviso: null,
   avisoRonda: null,
   victory: false,
