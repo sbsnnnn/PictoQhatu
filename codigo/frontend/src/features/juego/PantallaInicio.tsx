@@ -34,7 +34,7 @@ export function PantallaInicio({ enviar }: { enviar: (m: MensajeCliente) => void
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-crema">
-      <header className="textil relative shrink-0 bg-qhatu px-4 pt-6 pb-16 sm:pt-10 sm:pb-24">
+      <header className="textil relative shrink-0 bg-qhatu px-4 pt-10 pb-20 sm:pb-24">
         <h1 className="text-center text-6xl leading-none font-black tracking-tight sm:text-8xl">
           <span className="text-blanco">Picto</span>
           <span className="text-maiz">Qhatu</span>
@@ -43,8 +43,9 @@ export function PantallaInicio({ enviar }: { enviar: (m: MensajeCliente) => void
       </header>
 
       <main className="flex min-h-0 flex-1 flex-col items-center gap-4 px-4">
-        {/* El puesto ocupa el alto que sobra y mantiene 4:3 (cqw/cqh: unidades del contenedor) */}
-        <div className="grid min-h-0 w-full flex-1 place-items-center pt-2" style={{ containerType: 'size' }}>
+        {/* El puesto ocupa el alto que sobra y mantiene 4:3 (cqw/cqh: unidades del contenedor).
+            En móvil el SVG trae ~4% de aire por lado: se le quita el padding de main para que el dibujo quede a ~16 px del borde */}
+        <div className="grid min-h-0 w-[calc(100%+2rem)] flex-1 place-items-center pt-2 sm:w-full" style={{ containerType: 'size' }}>
           <div className="relative aspect-[4/3] w-[min(100cqw,133cqh,36rem)]">
             <img src={puesto} alt="Puesto de comida del mercado con una vendedora" className="absolute inset-0 size-full" />
             {FRUTAS.map((f) => (
