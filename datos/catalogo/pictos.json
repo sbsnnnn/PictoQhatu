@@ -88,7 +88,7 @@
       "etiqueta": "ARROZ",
       "categoria": "cereal",
       "color": "blanco",
-      "arasaac_id": 6911,
+      "arasaac_id": 39387,
       "img": "/pictos/arroz.png"
     }
   },
@@ -132,7 +132,7 @@
     },
     "AYUDA": {
       "etiqueta": "AYUDA",
-      "arasaac_id": 32648,
+      "arasaac_id": 12252,
       "img": "/pictos/ayuda.png"
     }
   },

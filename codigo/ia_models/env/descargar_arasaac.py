@@ -26,11 +26,12 @@ AGENTE_HTTP = {"User-Agent": "PictoQhatu-descarga/1.0"}
 # Término de búsqueda cuando la etiqueta no da el pictograma correcto como primer resultado
 TERMINOS = {
     "palta": "aguacate",
-    "AYUDA": "ayudar",                  # "ayuda" devuelve primero "apoyo"
 }
 # Ids fijos cuando ningún término sirve: "naranja" devuelve primero el color y
-# no hay "arroz con pollo" (27945 es paella de pollo; "paella" da primero la de mariscos)
-IDS_FIJOS = {"naranja": 2483, "arroz_con_pollo": 27945}
+# no hay "arroz con pollo" (27945 es paella de pollo; "paella" da primero la de mariscos).
+# AYUDA: manos que se tienden, en color (32648 era un esquema poco claro en pequeño).
+# arroz: plato de arroz blanco (6911 era la planta, se confundía con trigo).
+IDS_FIJOS = {"naranja": 2483, "arroz_con_pollo": 27945, "AYUDA": 12252, "arroz": 39387}
 
 
 def _buscar(termino):
