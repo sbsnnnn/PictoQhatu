@@ -7,7 +7,7 @@ import { Burbuja } from '../../components/Burbuja'
 import { Canasta } from '../../components/Canasta'
 import { EncabezadoRol } from '../../components/EncabezadoRol'
 import { FrasePictos } from '../../components/FrasePictos'
-import { IconoCheck, IconoCruz, IconoMira } from '../../components/Iconos'
+import { IconoAyuda, IconoCheck, IconoCruz } from '../../components/Iconos'
 import { Personaje } from '../../components/Personaje'
 import { Plato } from '../../components/Plato'
 import { TarjetaPaso } from '../../components/TarjetaPaso'
@@ -16,6 +16,7 @@ import type { MensajeCliente, Option, Picto } from '../../lib/protocol'
 import { sonarAcierto } from '../../lib/sonido'
 import { anchoEm } from '../../lib/etiqueta'
 import { decir, textoFrase } from '../../lib/tts'
+import { PistaAtributo, PistaMira } from './PistaAyuda'
 import { useJuego } from './store'
 
 type Estado = 'normal' | 'resaltar' | 'mostrar' | 'ok' | 'no'
@@ -109,7 +110,13 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
   // El paso que se prepara ahora ([PONER] + [POLLO]) va aparte, en su tarjeta
   const paso = vendedor && round && !confirm ? round.prompt : null
   const hecho = vendedor && !!feedback?.ok && !!feedback.option_id
-  const pista = !feedback && !confirm && round?.hint?.action === 'a5' ? round.hint.speech : ''
+  const ayuda = !feedback && !confirm ? round?.hint : null
+  const pista = ayuda?.action === 'a5' ? ayuda.speech : ''
+  // a1 (volver a decir): la frase dicha se enmarca en maíz mientras dura la ronda
+  const eco = ayuda?.action === 'a1' ? 'ring-8 ring-maiz' : ''
+  // En tablet horizontal la burbuja muestra la pista (como en el diseño): ¡MIRA! + el picto de la respuesta (a2/a4)
+  // o el atributo (a5). En una columna el a5 ocupa el lugar del plato o la canasta: no le quita alto a las tarjetas.
+  const mira = ayuda?.target ? round?.options.find((o) => o.id === ayuda.target)?.pictos.at(-1) : undefined
 
   // Mismo tamaño de etiqueta en todas las tarjetas de la ronda: lo fija la palabra más larga
   const letras = Math.max(2, ...(round?.options ?? []).flatMap((o) => o.label.split(' ').map(anchoEm)))
@@ -134,7 +141,7 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
               {vendedor && feedback?.option_id && <Respuesta ok={feedback.ok} className="max-lg:hidden" />}
             </div>
             <Burbuja
-              className={`min-w-0 flex-1 lg:w-full lg:flex-none ${burbuja.length || feedback ? '' : 'invisible'} ${paso && !feedback ? 'max-lg:hidden' : ''}`}
+              className={`min-w-0 flex-1 lg:w-full lg:flex-none ${burbuja.length || feedback ? '' : 'invisible'} ${paso && !feedback ? 'max-lg:hidden' : ''} ${eco}`}
             >
               {vendedor && feedback?.option_id && (
                 <div className="max-lg:hidden">
@@ -151,15 +158,22 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
                   )}
                   <p className="min-w-0 text-center text-2xl leading-tight font-bold max-sm:sr-only">{fraseFeedback(feedback.ok, feedback.option_id)}</p>
                 </div>
+              ) : mira || pista ? (
+                <>
+                  <div className="lg:hidden">
+                    <FrasePictos pictos={burbuja} />
+                  </div>
+                  {pista ? <PistaAtributo texto={pista} className="max-lg:hidden" /> : mira && <PistaMira picto={mira} className="max-lg:hidden" />}
+                </>
               ) : (
                 <FrasePictos pictos={burbuja} />
               )}
             </Burbuja>
             {/* En una columna el paso ocupa el lugar de la burbuja (el pedido queda en EL PLATO): así las tarjetas
                 miden lo mismo que en el cliente. La burbuja vuelve para la respuesta del cliente. */}
-            {paso && !feedback && <TarjetaPaso pictos={paso} className="min-w-0 flex-1 lg:hidden" />}
+            {paso && !feedback && <TarjetaPaso pictos={paso} className={`min-w-0 flex-1 lg:hidden ${eco}`} />}
           </section>
-          {paso && <TarjetaPaso pictos={paso} hecho={hecho} className="max-lg:hidden" />}
+          {paso && <TarjetaPaso pictos={paso} hecho={hecho} className={`max-lg:hidden ${eco}`} />}
         </div>
 
         {/* Tarjetas de tamaño fijo (proporción 220×244) que se achican solo si no caben; nunca se estiran */}
@@ -183,7 +197,15 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
 
         {/* Panel: la canasta del cliente o el plato del vendedor (fila de 4 casillas en una columna) */}
         <div className="flex h-24 shrink-0 items-center justify-center bajo:h-16 lg:h-auto lg:self-center">
-          {vendedor ? <Plato pictos={plato} recien={hecho} pedido={pedido?.at(-1)} /> : <Canasta pictos={canasta} />}
+          {pista && (
+            <PistaAtributo
+              texto={pista}
+              className="rounded-pildora border-4 border-tinta bg-blanco py-1 pr-5 pl-1 shadow-suave-sm lg:hidden"
+            />
+          )}
+          <div className={`contents ${pista ? 'max-lg:hidden' : ''}`}>
+            {vendedor ? <Plato pictos={plato} recien={hecho} pedido={pedido?.at(-1)} /> : <Canasta pictos={canasta} />}
+          </div>
         </div>
       </main>
 
@@ -263,7 +285,7 @@ function TarjetaOpcion({
 
   const marco = {
     normal: 'border-tinta',
-    resaltar: 'border-tinta ring-8 ring-naranja',
+    resaltar: 'border-tinta ring-8 ring-maiz',
     mostrar: 'border-tinta ring-8 ring-verde',
     ok: 'border-verde',
     no: 'border-tinta border-dashed',
@@ -304,8 +326,8 @@ function Insignia({ estado }: { estado: Estado }) {
   switch (estado) {
     case 'resaltar':
       return (
-        <span className={`${base} bg-maiz text-tinta`} aria-hidden>
-          <IconoMira className="size-7" />
+        <span className={`${base} bg-naranja text-tinta`} aria-hidden>
+          <IconoAyuda className="size-7" />
         </span>
       )
     case 'mostrar':
