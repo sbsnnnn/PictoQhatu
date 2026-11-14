@@ -14,6 +14,7 @@ def test_sirve_el_build_del_frontend_sin_tapar_ws_ni_pictos(tmp_path):
         assert "PictoQhatu" in client.get("/").text
         assert client.get("/assets/app.js").text == "console.log(1)"
         assert client.get("/pictos/pan.png").status_code == 200
+        assert client.get("/pictos/pan.png?v=2447").status_code == 200    # la versión no cambia la ruta
         with client.websocket_connect("/ws/sala1") as ws:
             ws.send_json({"type": "join", "avatar": "manzana"})
             assert ws.receive_json()["type"] == "joined"

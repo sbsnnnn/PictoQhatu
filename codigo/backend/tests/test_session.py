@@ -172,3 +172,13 @@ def test_hint_a5_dice_atributo_o_repite():
 
 def test_sin_tabla_q_usa_regla_fija(tmp_path):
     assert isinstance(cargar_agente(tmp_path / "no_hay.npy"), AgenteReglaFija)
+
+
+def test_las_imagenes_llevan_la_version_de_arasaac():
+    """?v=<arasaac_id>: al cambiar un picto, el navegador no usa la imagen vieja de su caché."""
+    from backend.app.game.session import picto
+    from ia_models.env.catalogo import PICTOS
+
+    assert picto("arroz").img == f"/pictos/arroz.png?v={PICTOS['arroz']['arasaac_id']}"
+    ronda = GameSession(AgenteReglaFija(), random.Random(3)).start_round()[-1]
+    assert all("?v=" in p.img for o in ronda.options for p in o.pictos)

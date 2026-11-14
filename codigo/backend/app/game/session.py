@@ -52,7 +52,8 @@ def cargar_agente(ruta: Path):
 
 def picto(id_: str) -> Picto:
     p = PICTOS[id_]
-    return Picto(id=id_, label=p["etiqueta"], img=p["img"])
+    # ?v=: si se cambia el picto de ARASAAC, la URL cambia y el navegador no usa la imagen vieja de su caché
+    return Picto(id=id_, label=p["etiqueta"], img=f"{p['img']}?v={p['arasaac_id']}")
 
 
 def option_id(op) -> str:
