@@ -26,6 +26,10 @@ Pruebas: `pytest` y `ruff check .` desde `codigo/`; `npm run build` y `npm run l
 - **Las salas viven en memoria y no sobreviven a un reinicio del servidor.** Si el servidor se reinicia a mitad de una partida, la pestaña se reconecta sola y empieza una partida nueva desde el inicio.
 - Un asiento se juega desde una sola pestaña. Si se abre en otra (mismo `seat_token`), la nueva toma la partida y la anterior muestra "Sigues jugando en otra pestaña".
 
+## Pendiente para el Hito 3
+
+- **Bloqueo en la propia sala.** Si la conexión se corta justo después de que el servidor crea la sala y antes de que llegue `joined`, el cliente no guarda su `seat_token`. Al reconectar, el servidor lo trata como otro jugador y muestra "Esta sala ya tiene un jugador". El jugador tiene que empezar una partida nueva.
+
 ## Créditos
 
 Pictogramas: Sergio Palao. Origen: ARASAAC (https://arasaac.org). Licencia: CC BY-NC-SA. Propiedad: Gobierno de Aragón (España).
