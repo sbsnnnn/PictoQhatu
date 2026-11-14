@@ -9,6 +9,10 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
 Seat = Literal["cliente", "vendedor"]
+
+# Códigos de cierre del WebSocket (el cliente no reintenta con ninguno de los dos)
+CIERRE_SALA_OCUPADA = 4002      # otro jugador ya tiene la sala (no 1008: un proxy también lo usa)
+CIERRE_REEMPLAZADA = 4001       # el mismo asiento se abrió en otra pestaña o dispositivo
 Fase = Literal[1, 2, 3]
 
 
@@ -58,7 +62,7 @@ class Summary(_Mensaje):
 # ------------------------------------------------------------------
 class Join(_Mensaje):
     type: Literal["join"]
-    alias: str = Field(min_length=1, max_length=20)
+    alias: str = Field(default="", max_length=20)   # opcional: el nombre no es obligatorio
     avatar: str                 # id de un ingrediente
     seat_token: str | None = None
 
@@ -117,6 +121,7 @@ class Confirm(_Mensaje):
 class RoleSwap(_Mensaje):
     type: Literal["role_swap"] = "role_swap"
     seat: Seat                  # asiento nuevo del jugador
+    order: list[Picto]          # lo que pide la IA clienta: [QUIERO, plato del Modo B]
 
 
 class PhaseChange(_Mensaje):

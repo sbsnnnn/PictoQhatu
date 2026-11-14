@@ -1,5 +1,6 @@
 // Servidor simulado (?mock=1): una partida A→B guionada que respeta el contrato de protocol.ts.
 // Sirve para trabajar la interfaz sin backend. Con &final=solucion termina con victory=false.
+import { nuevoId } from './id'
 import type { Conexion } from './socket'
 import type { Fase, Hint, MensajeCliente, MensajeServidor, Option, Picto, Seat } from './protocol'
 
@@ -139,7 +140,7 @@ export function crearMock(alRecibir: (m: MensajeServidor) => void): Conexion {
   const recibir = (m: MensajeCliente) => {
     switch (m.type) {
       case 'join':
-        emitir({ type: 'joined', seat, seat_token: m.seat_token ?? crypto.randomUUID() })
+        emitir({ type: 'joined', seat, seat_token: m.seat_token ?? nuevoId() })
         if (actual) enviarRonda(actual)
         else siguiente()
         return
@@ -167,7 +168,7 @@ export function crearMock(alRecibir: (m: MensajeServidor) => void): Conexion {
           return
         }
         seat = 'vendedor'
-        emitir({ type: 'role_swap', seat }, 150)
+        emitir({ type: 'role_swap', seat, order: [P.QUIERO, P.sandwich] }, 150)
         rondas = tramoB()
         siguiente()
         return

@@ -52,7 +52,8 @@ def cargar_agente(ruta: Path):
 
 def picto(id_: str) -> Picto:
     p = PICTOS[id_]
-    return Picto(id=id_, label=p["etiqueta"], img=p["img"])
+    # ?v=: si se cambia el picto de ARASAAC, la URL cambia y el navegador no usa la imagen vieja de su caché
+    return Picto(id=id_, label=p["etiqueta"], img=f"{p['img']}?v={p['arasaac_id']}")
 
 
 def option_id(op) -> str:
@@ -86,6 +87,7 @@ class GameSession:
         self.ronda = None
         self.a = 0
         self.ultimo = None               # último Round / Confirm / GameOver (reconexión)
+        self.swap = None                 # RoleSwap del Modo B: al reconectar se reenvía el pedido
         self._totales = [0, 0, 0]        # turnos, ayudas, errores de los entornos ya cerrados
         self._rng_estado = None
 
@@ -139,7 +141,8 @@ class GameSession:
         if valor == "SI":
             self.tramo += 1
             self.env = _entorno_modo_b(self.rng, self.rng.choice(list(PLATOS)))
-            return [RoleSwap(seat=self.seat)] + self.start_round()
+            self.swap = RoleSwap(seat=self.seat, order=[picto("QUIERO"), picto(self.env.d)])
+            return [self.swap] + self.start_round()
         self.env = EntornoPictoCocina(self.rng)    # [NO]: el pedido se reinicia, no cuenta error
         return [Feedback(ok=True, npc=[picto("SI")])] + self.start_round()
 

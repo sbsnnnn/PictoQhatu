@@ -3,8 +3,9 @@ import { IconoCheck } from '../../components/Iconos'
 import { ImagenPicto } from '../../components/Pictograma'
 import type { MensajeCliente, Picto } from '../../lib/protocol'
 import { leerToken } from '../../lib/socket'
-import { decir, desbloquearVoz } from '../../lib/tts'
+import { desbloquearVoz } from '../../lib/tts'
 import { Atribucion } from './Atribucion'
+import { useJuego } from './store'
 
 // Avatar = un picto de ingrediente (no se guardan datos personales, §2). Máximo 4 opciones.
 const AVATARES: Picto[] = [
@@ -20,7 +21,7 @@ export function PantallaInicio({ enviar }: { enviar: (m: MensajeCliente) => void
 
   const jugar = () => {
     desbloquearVoz() // primer toque: los navegadores solo permiten la voz después de un gesto
-    decir('Vamos a jugar')
+    useJuego.setState({ aviso: 'Vamos a jugar' }) // se dice antes del primer prompt; suelto, el prompt lo cortaba
     enviar({ type: 'join', alias: alias.trim().slice(0, 20), avatar, seat_token: leerToken() })
   }
 

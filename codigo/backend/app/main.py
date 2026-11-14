@@ -4,11 +4,9 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from backend.app.api.ws import router as ws_router
-from backend.app.core.config import RAIZ, Settings
+from backend.app.core.config import Settings
 from backend.app.game.rooms import RoomManager
 from backend.app.game.session import cargar_agente
-
-DIST = RAIZ / "codigo" / "frontend" / "dist"
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -19,8 +17,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     pictos = settings.datos / "catalogo"
     if pictos.is_dir():
         app.mount("/pictos", StaticFiles(directory=pictos), name="pictos")
-    if DIST.is_dir():                                # al final: "/" captura todo lo demás
-        app.mount("/", StaticFiles(directory=DIST, html=True), name="frontend")
+    if settings.dist.is_dir():                       # sin build (tests, npm run dev) no se sirve
+        app.frontend("/", directory=settings.dist)   # rutas de baja prioridad: /ws y /pictos ganan
     return app
 
 

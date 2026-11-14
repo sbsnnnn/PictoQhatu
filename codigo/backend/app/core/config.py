@@ -1,4 +1,4 @@
-"""Rutas de datos del backend. Se pueden cambiar con variables PICTOQHATU_DATOS / PICTOQHATU_TABLA_Q."""
+"""Rutas del backend. Se cambian con PICTOQHATU_DATOS, PICTOQHATU_TABLA_Q y PICTOQHATU_DIST."""
 
 from pathlib import Path
 
@@ -12,3 +12,4 @@ class Settings(BaseSettings):
 
     datos: Path = RAIZ / "datos"
     tabla_q: Path = RAIZ / "datos" / "modelos" / "tabla_q.npy"
+    dist: Path = RAIZ / "codigo" / "frontend" / "dist"   # build de Vite (npm run build)

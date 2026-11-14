@@ -31,6 +31,7 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
   const avisoRonda = useJuego((s) => s.avisoRonda)
   const feedback = useJuego((s) => s.feedback)
   const confirm = useJuego((s) => s.confirm)
+  const pedido = useJuego((s) => s.pedido)
   const reducir = useReducedMotion() ?? false
 
   const finVoz = useRef<number | null>(null)
@@ -121,6 +122,7 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
           <div
             className={`relative flex min-w-0 flex-1 flex-col gap-2 rounded-tarjeta border-4 border-tinta bg-blanco p-3 shadow-bloque-sm ${frase.length || feedback || avisoRonda ? '' : 'invisible'}`}
           >
+            {seat === 'vendedor' && pedido && !feedback && <FrasePictos pictos={pedido} />}
             {avisoRonda && !feedback && <p className="text-2xl font-bold">{avisoRonda}</p>}
             {feedback ? (
               <div className="flex flex-wrap items-center gap-3">
