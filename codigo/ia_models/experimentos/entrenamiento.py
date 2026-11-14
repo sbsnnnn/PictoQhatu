@@ -186,8 +186,13 @@ def _grafico_linea(ruta, x, y, titulo, eje_y, log=False):
     plt.close(fig)
 
 
-def _grafico_sensibilidad(ruta, filas, parametro, valores):
-    filas = sorted((f for f in filas if f[parametro] in valores), key=lambda f: f[parametro])
+def filas_de_factor(filas, parametro):
+    """Filas donde solo varía `parametro` (las de su factor + la base), ordenadas por su valor."""
+    return sorted((f for f in filas if f["factor"] in (parametro, "base")), key=lambda f: f[parametro])
+
+
+def _grafico_sensibilidad(ruta, filas, parametro):
+    filas = filas_de_factor(filas, parametro)
     etiquetas = [str(f[parametro]) for f in filas]
     simbolo = "α" if parametro == "alfa" else "γ"
     fijo = f"γ = {GAMMA_BASE}" if parametro == "alfa" else f"α = {ALFA_BASE}"
@@ -248,8 +253,8 @@ def ejecutar(episodios=30000, partidas=100, semillas=(42, 43, 44), salida=None):
         print(f"  alfa={f['alfa']:<5} gamma={f['gamma']:<5} "
               f"éxito={f['exito_media']:.3f}±{f['exito_desv']:.3f} "
               f"recompensa={f['recompensa_media']:.2f}±{f['recompensa_desv']:.2f}")
-    _grafico_sensibilidad(curvas / "sensibilidad_alfa.png", sens, "alfa", ALFAS)
-    _grafico_sensibilidad(curvas / "sensibilidad_gamma.png", sens, "gamma", GAMMAS)
+    _grafico_sensibilidad(curvas / "sensibilidad_alfa.png", sens, "alfa")
+    _grafico_sensibilidad(curvas / "sensibilidad_gamma.png", sens, "gamma")
     print(f"Listo en {(time.time() - inicio) / 60:.1f} min. Salidas en {salida}")
 
 

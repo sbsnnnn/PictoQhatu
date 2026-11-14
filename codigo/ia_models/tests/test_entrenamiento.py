@@ -79,6 +79,12 @@ def test_evaluar_con_frustracion_coincide_con_evaluar():
     assert m["frustracion"] >= 0
 
 
+def test_filas_de_factor_no_mezcla_factores():
+    filas = [{"factor": f, "alfa": a, "gamma": g} for f, a, g in ent.configuraciones()]
+    assert [f["gamma"] for f in ent.filas_de_factor(filas, "gamma")] == list(ent.GAMMAS)
+    assert [f["alfa"] for f in ent.filas_de_factor(filas, "alfa")] == list(ent.ALFAS)
+
+
 def test_ejecutar_rapido_escribe_csv_y_png(tmp_path):
     ent.ejecutar(episodios=60, partidas=2, semillas=(42,), salida=tmp_path)
     metricas, curvas = tmp_path / "metricas", tmp_path / "curvas"
