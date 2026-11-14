@@ -25,7 +25,7 @@ interface Props {
 /** Tarjeta crema con borde tinta: imagen + etiqueta en MAYÚSCULAS. El id "?" es la casilla vacía. */
 export function Pictograma({ picto, tamano = 'md' }: Props) {
   // Ancho mínimo y no fijo: las etiquetas largas (ZANAHORIA) no se cortan
-  const caja = tamano === 'md' ? 'min-w-28 h-32 sm:min-w-32 sm:h-36' : 'min-w-24 h-28'
+  const caja = tamano === 'md' ? 'min-w-28 h-32 sm:min-w-32 sm:h-36' : 'min-w-22 h-26 sm:min-w-24 sm:h-28'
   if (picto.id === '?') {
     return (
       <div
@@ -39,7 +39,7 @@ export function Pictograma({ picto, tamano = 'md' }: Props) {
   }
   return (
     <div
-      className={`${caja} flex shrink-0 flex-col items-center justify-center gap-1 rounded-tarjeta border-4 border-tinta bg-blanco p-2 shadow-bloque-sm`}
+      className={`${caja} flex shrink-0 flex-col items-center justify-center gap-1 rounded-tarjeta border-4 border-tinta bg-blanco p-2`}
     >
       <ImagenPicto picto={picto} className="w-full flex-1" />
       <span className="text-center text-2xl leading-tight font-bold uppercase">{picto.label}</span>

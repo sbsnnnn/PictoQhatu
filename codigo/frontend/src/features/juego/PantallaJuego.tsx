@@ -1,7 +1,11 @@
 import { motion, useReducedMotion, type TargetAndTransition } from 'motion/react'
 import { useEffect, useRef } from 'react'
 import { BotonAyuda } from '../../components/BotonAyuda'
+import { BotonRepetir } from '../../components/BotonRepetir'
 import { BotonSiNo } from '../../components/BotonSiNo'
+import { Burbuja } from '../../components/Burbuja'
+import { Canasta } from '../../components/Canasta'
+import { EncabezadoRol } from '../../components/EncabezadoRol'
 import { FrasePictos } from '../../components/FrasePictos'
 import { IconoCheck, IconoCruz, IconoMira } from '../../components/Iconos'
 import { Personaje } from '../../components/Personaje'
@@ -92,75 +96,75 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
   }
 
   const ia = seat === 'cliente' ? 'vendedor' : 'cliente'
-  const banda = seat === 'cliente' ? 'bg-qhatu' : 'bg-indigo'
-  const titulo = seat === 'cliente' ? 'Tú pides la comida' : 'Tú preparas la comida'
+  const canasta = useJuego((s) => s.canasta)
 
   // Lo que dice el personaje: feedback > confirmación > prompt
   let frase: Picto[] = round?.prompt ?? []
   if (confirm) frase = comoPregunta(confirm)
   if (feedback) frase = feedback.npc
 
-  return (
-    <div className="flex h-dvh flex-col bg-crema">
-      {/* Banda de rol: color fuerte arriba, área de juego limpia abajo */}
-      <header className={`relative ${banda} px-4 pt-3 pb-6 text-blanco transition-colors`}>
-        <h1 className="text-center text-2xl font-black sm:text-3xl">{titulo}</h1>
-        <svg
-          viewBox="0 0 1200 24"
-          preserveAspectRatio="none"
-          className="absolute inset-x-0 -bottom-[23px] h-6 w-full"
-          aria-hidden
-        >
-          <path d="M0 0h1200v8c-100 16-200 16-300 0s-200-16-300 0-200 16-300 0S100-8 0 8z" className={seat === 'cliente' ? 'fill-qhatu' : 'fill-indigo'} />
-        </svg>
-      </header>
+  const repetir = () => decir(textoFrase(seat === 'vendedor' && pedido ? [...pedido, ...frase] : frase))
 
-      <main className="mx-auto flex min-h-0 w-full max-w-4xl flex-1 flex-col gap-4 px-4 pt-8 pb-4">
+  return (
+    <div className="flex h-dvh flex-col overflow-hidden bg-crema">
+      <EncabezadoRol seat={seat} />
+
+      {/* Tablet: personaje y burbuja | tarjetas 2×2 | canasta. Móvil: una columna. */}
+      <main className="flex min-h-0 flex-1 flex-col gap-4 px-4 pt-1 pb-3 md:grid md:grid-cols-[minmax(0,23rem)_minmax(0,27rem)_minmax(0,13rem)] md:items-center md:justify-center md:gap-x-8 md:px-6 md:py-4">
         {/* Personaje con su frase en pictos */}
-        <section aria-live="polite" className="flex items-end gap-3">
-          <Personaje rol={ia} />
-          <div
-            className={`relative flex min-w-0 flex-1 flex-col gap-2 rounded-tarjeta border-4 border-tinta bg-blanco p-3 shadow-bloque-sm ${frase.length || feedback || avisoRonda ? '' : 'invisible'}`}
-          >
-            {seat === 'vendedor' && pedido && !feedback && <FrasePictos pictos={pedido} />}
-            {avisoRonda && !feedback && <p className="text-2xl font-bold">{avisoRonda}</p>}
-            {feedback ? (
-              <div className="flex flex-wrap items-center gap-3">
-                <Sello ok={feedback.ok} />
-                {frase.length > 0 && <FrasePictos pictos={frase} />}
-                <p className="text-2xl font-bold">{fraseFeedback(feedback.ok, feedback.option_id)}</p>
-              </div>
-            ) : (
-              frase.length > 0 && <FrasePictos pictos={frase} />
-            )}
-            {!feedback && !confirm && round?.hint?.speech && round.hint.action === 'a5' && (
-              <p className="text-2xl font-bold">{round.hint.speech}</p>
-            )}
-          </div>
+        <section aria-live="polite" className="flex items-center gap-3 md:flex-col md:items-start md:gap-6">
+          <Personaje rol={ia} className="h-24 w-16 md:ml-4 md:h-48 md:w-36" />
+          <Burbuja className={`min-w-0 flex-1 md:w-full md:flex-none ${frase.length || feedback || avisoRonda ? '' : 'invisible'}`}>
+            <div className="flex flex-col gap-2">
+              {seat === 'vendedor' && pedido && !feedback && <FrasePictos pictos={pedido} />}
+              {avisoRonda && !feedback && <p className="text-2xl font-bold">{avisoRonda}</p>}
+              {feedback ? (
+                <div className="flex flex-wrap items-center gap-3">
+                  <Sello ok={feedback.ok} />
+                  {frase.length > 0 && <FrasePictos pictos={frase} />}
+                  <p className="text-2xl font-bold">{fraseFeedback(feedback.ok, feedback.option_id)}</p>
+                </div>
+              ) : (
+                frase.length > 0 && <FrasePictos pictos={frase} />
+              )}
+              {!feedback && !confirm && round?.hint?.speech && round.hint.action === 'a5' && (
+                <p className="text-2xl font-bold">{round.hint.speech}</p>
+              )}
+            </div>
+          </Burbuja>
         </section>
 
         {/* Un solo foco: las opciones, o el plato que se confirma */}
         {confirm ? (
-          <div className="grid flex-1 place-items-center">
+          <div className="grid min-h-0 flex-1 place-items-center md:h-full">
             <Pictograma picto={confirm[confirm.length - 1]} />
           </div>
         ) : (
-          round && (
-            <ul
-              className={`grid min-h-0 flex-1 auto-rows-fr gap-4 ${round.options.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}
-            >
-              {round.options.slice(0, 4).map((o) => (
-                <li key={o.id} className="min-h-0">
-                  <TarjetaOpcion opcion={o} estado={estadoDe(o)} reducir={reducir} onTocar={() => tocar(o.id)} />
-                </li>
-              ))}
-            </ul>
-          )
+          <ul
+            className={`grid min-h-0 flex-1 auto-rows-fr gap-4 md:h-full md:max-h-[32rem] md:gap-6 ${(round?.options.length ?? 0) > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}
+          >
+            {round?.options.slice(0, 4).map((o) => (
+              <li key={o.id} className="min-h-0">
+                <TarjetaOpcion opcion={o} estado={estadoDe(o)} reducir={reducir} onTocar={() => tocar(o.id)} />
+              </li>
+            ))}
+          </ul>
         )}
+
+        {seat === 'cliente' ? <Canasta pictos={canasta} /> : <div aria-hidden className="max-md:hidden" />}
       </main>
 
-      <footer className="flex justify-center gap-4 border-t-4 border-tinta bg-blanco px-4 py-3">
-        {confirm ? <BotonSiNo onRespuesta={responder} /> : <BotonAyuda onClick={() => enviar({ type: 'help' })} />}
+      <footer className="grid shrink-0 grid-cols-[1.15fr_1fr] gap-3 px-4 pt-1 pb-5 md:flex md:justify-center md:gap-8 md:pb-6">
+        {confirm ? (
+          <div className="col-span-2 flex justify-center">
+            <BotonSiNo onRespuesta={responder} />
+          </div>
+        ) : (
+          <>
+            <BotonAyuda onClick={() => enviar({ type: 'help' })} className="md:w-80" />
+            <BotonRepetir onClick={repetir} className="md:w-72" />
+          </>
+        )}
       </footer>
     </div>
   )
@@ -226,15 +230,15 @@ function TarjetaOpcion({
       initial={{ opacity: 0 }}
       animate={movimiento[estado]}
       transition={{ duration: 0.2 }}
-      className={`relative flex h-full min-h-24 w-full flex-col items-center justify-center gap-2 rounded-tarjeta border-4 bg-blanco p-3 shadow-bloque active:translate-y-1.5 active:shadow-none ${marco}`}
+      className={`relative flex h-full min-h-24 w-full flex-col items-center justify-center gap-2 rounded-tarjeta border-4 bg-crema p-3 shadow-suave active:translate-y-1.5 active:shadow-none ${marco}`}
     >
       {/* Sin imagen (aún no descargada o rota) la etiqueta queda sola y centrada */}
       <span className="flex min-h-0 w-full items-center justify-center gap-2 has-[img]:flex-1">
         {opcion.pictos.map((p) => (
-          <ImagenPicto key={p.id} picto={p} className="h-full max-h-40 w-auto max-w-[48%] flex-1" />
+          <ImagenPicto key={p.id} picto={p} className={`h-full max-h-40 w-auto flex-1 ${opcion.pictos.length > 1 ? 'max-w-[48%]' : 'max-w-full'}`} />
         ))}
       </span>
-      <span className="text-center text-2xl leading-tight font-bold uppercase sm:text-3xl">{opcion.label}</span>
+      <span className="text-center text-2xl leading-tight font-bold tracking-wide uppercase sm:text-3xl">{opcion.label}</span>
       <Insignia estado={estado} />
     </motion.button>
   )

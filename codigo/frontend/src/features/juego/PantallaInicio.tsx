@@ -1,5 +1,6 @@
 import puesto from '../../assets/ilustraciones/puesto.svg'
 import { IconoAltavoz, IconoPlay } from '../../components/Iconos'
+import { Onda } from '../../components/Onda'
 import type { MensajeCliente } from '../../lib/protocol'
 import { leerToken } from '../../lib/socket'
 import { desbloquearVoz } from '../../lib/tts'
@@ -11,18 +12,6 @@ const FRUTAS = [
   { id: 'platano', v: 2530, left: 66.5, top: 58, width: 9.5 },
   { id: 'naranja', v: 2483, left: 84, top: 45.5, width: 7.5 },
 ]
-
-/** Onda que recorta una banda de color: se pinta en crema encima del borde de la banda. */
-function Onda({ abajo = false }: { abajo?: boolean }) {
-  const d = abajo
-    ? 'M0 0h1200v40C1000 70 800 0 600 30S200 70 0 40z' // borde inferior de la banda de arriba
-    : 'M0 0h1200v40C1000 10 800 70 600 40S150 0 0 50z' // borde superior de la banda de abajo
-  return (
-    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" className={`absolute inset-x-0 h-12 w-full sm:h-16 ${abajo ? '-bottom-px rotate-180' : '-top-px'}`} aria-hidden>
-      <path d={d} className="fill-crema" />
-    </svg>
-  )
-}
 
 export function PantallaInicio({ enviar }: { enviar: (m: MensajeCliente) => void }) {
   const jugar = () => {

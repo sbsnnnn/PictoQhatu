@@ -14,6 +14,8 @@ export interface EstadoJuego {
   confirm: Picto[] | null
   /** Lo que pide la IA clienta en el Modo B; queda a la vista mientras el jugador prepara. */
   pedido: Picto[] | null
+  /** MI CANASTA: ingredientes que el servidor aceptó en la fase 1 (el front no decide aciertos). */
+  canasta: Picto[]
   /** Frase que se dice una vez antes del próximo prompt (cambio de rol o de fase). */
   aviso: string | null
   /** Aviso que acompaña a la ronda actual (se dice antes de su prompt). */
@@ -34,14 +36,19 @@ function aplicar(s: EstadoJuego, m: MensajeServidor): Partial<EstadoJuego> {
       return { seat: m.seat, pantalla: 'juego' }
     case 'round':
       return { round: m, seat: m.seat, phase: m.phase, confirm: null, pantalla: 'juego', avisoRonda: s.aviso, aviso: null }
-    case 'feedback':
-      return { feedback: m }
+    case 'feedback': {
+      // shortcut: la canasta vive en el navegador; tras recargar la pestaña empieza vacía hasta el próximo acierto
+      if (!m.option_id) return { feedback: m, canasta: [] } // [NO] en la confirmación: el pedido empieza de nuevo
+      const opcion = s.round?.phase === 1 && m.ok ? s.round.options.find((o) => o.id === m.option_id) : undefined
+      return { feedback: m, canasta: opcion ? [...s.canasta, opcion.pictos[0]] : s.canasta }
+    }
     case 'confirm':
       return { confirm: m.prompt }
     case 'role_swap':
       return {
         seat: m.seat,
         round: null,
+        canasta: [],
         pedido: m.order,
         aviso: `${m.seat === 'vendedor' ? 'Ahora tú preparas la comida' : 'Ahora tú pides la comida'}. ${textoFrase(m.order)}`,
       }
@@ -64,6 +71,7 @@ export const useJuego = create<EstadoJuego>()((set, get) => ({
   feedback: null,
   confirm: null,
   pedido: null,
+  canasta: [],
   aviso: null,
   avisoRonda: null,
   victory: false,
