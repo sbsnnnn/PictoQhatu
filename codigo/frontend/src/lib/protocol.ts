@@ -2,6 +2,10 @@
 // si cambia uno, cambia el otro en el mismo commit. Campos en snake_case, igual que en el cable.
 
 export type Seat = 'cliente' | 'vendedor'
+
+// Códigos de cierre del WebSocket (el cliente no reintenta con ninguno de los dos)
+export const CIERRE_SALA_OCUPADA = 1008 // otro jugador ya tiene la sala
+export const CIERRE_REEMPLAZADA = 4001 // el mismo asiento se abrió en otra pestaña o dispositivo
 export type Fase = 1 | 2 | 3
 
 // ---------------- Tipos compartidos ----------------

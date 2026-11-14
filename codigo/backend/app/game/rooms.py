@@ -16,6 +16,7 @@ class SalaOcupada(Exception):
 class Sala:
     sesion: GameSession
     token: str
+    conexion: object = None     # WebSocket que maneja el asiento ahora: gana la última
 
 
 class RoomManager:
