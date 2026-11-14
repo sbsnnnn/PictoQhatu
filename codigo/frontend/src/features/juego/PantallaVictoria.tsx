@@ -1,18 +1,10 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { useEffect } from 'react'
 import { Pictograma } from '../../components/Pictograma'
+import { nuevaPartida } from '../../lib/socket'
 import { decir } from '../../lib/tts'
 import { Atribucion } from './Atribucion'
 import { useJuego } from './store'
-
-const otraVez = () => {
-  try {
-    sessionStorage.clear() // nueva sala y nuevo asiento
-  } catch {
-    /* sin almacenamiento: igual se recarga */
-  }
-  location.reload()
-}
 
 /** Final de la partida. Con victory=false se muestra la receta con cariño: nunca "perdiste". */
 export function PantallaVictoria() {
@@ -69,7 +61,7 @@ export function PantallaVictoria() {
 
         <button
           type="button"
-          onClick={otraVez}
+          onClick={nuevaPartida}
           className="min-h-28 w-full max-w-md rounded-pildora border-4 border-tinta bg-maiz px-10 font-titulo text-4xl font-black text-tinta shadow-bloque active:translate-y-1.5 active:shadow-none"
         >
           JUGAR OTRA VEZ

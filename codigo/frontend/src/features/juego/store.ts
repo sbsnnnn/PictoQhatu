@@ -17,6 +17,8 @@ export interface EstadoJuego {
   avisoRonda: string | null
   victory: boolean
   summary: Summary | null
+  /** El servidor cerró la conexión para siempre: el asiento se abrió en otra pestaña o la sala está ocupada. */
+  cerrada: 'reemplazada' | 'ocupada' | null
   /** Mensajes que llegan mientras se muestra un feedback; se aplican al terminarlo. */
   cola: MensajeServidor[]
   recibir: (m: MensajeServidor) => void
@@ -61,6 +63,7 @@ export const useJuego = create<EstadoJuego>()((set, get) => ({
   avisoRonda: null,
   victory: false,
   summary: null,
+  cerrada: null,
   cola: [],
   recibir: (m) => {
     if (get().feedback && m.type !== 'joined' && m.type !== 'error') {

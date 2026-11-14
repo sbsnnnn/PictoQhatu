@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useJuego } from '../features/juego/store'
 import { crearMock } from './mockServidor'
-import type { MensajeCliente, MensajeServidor } from './protocol'
+import { CIERRE_REEMPLAZADA, CIERRE_SALA_OCUPADA, type MensajeCliente, type MensajeServidor } from './protocol'
 
 export interface Conexion {
   enviar: (m: MensajeCliente) => void
@@ -26,6 +26,18 @@ const guardarToken = (t: string) => {
   } catch {
     /* sin almacenamiento: no habrá reconexión tras recargar, pero se puede jugar */
   }
+}
+
+/** Nueva sala y nuevo asiento: se borra lo guardado en la pestaña y se recarga. */
+export function nuevaPartida() {
+  try {
+    sessionStorage.clear()
+  } catch {
+    /* sin almacenamiento: igual se recarga */
+  }
+  const url = new URL(location.href)
+  url.searchParams.delete('sala') // una sala fijada en la URL volvería a la misma
+  location.replace(url)
 }
 
 export const usarMock = () =>
@@ -57,8 +69,14 @@ function conectarWs(sala: string, alRecibir: (m: MensajeServidor) => void, alAbr
       }
     }
     // Las tablets se suspenden: se reintenta en silencio, cada vez un poco más tarde
-    ws.onclose = () => {
+    ws.onclose = (e) => {
       if (cerrado) return
+      // Cierres definitivos: reintentar solo repetiría el mismo rechazo
+      if (e.code === CIERRE_REEMPLAZADA || e.code === CIERRE_SALA_OCUPADA) {
+        cerrado = true
+        useJuego.setState({ cerrada: e.code === CIERRE_REEMPLAZADA ? 'reemplazada' : 'ocupada' })
+        return
+      }
       intentos += 1
       reintento = setTimeout(abrir, Math.min(intentos, 5) * 1000)
     }

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AvisoConexion } from './features/juego/AvisoConexion'
 import { PantallaInicio } from './features/juego/PantallaInicio'
 import { PantallaJuego } from './features/juego/PantallaJuego'
 import { PantallaVictoria } from './features/juego/PantallaVictoria'
@@ -26,7 +27,9 @@ export default function App() {
   const [sala] = useState(salaInicial)
   const { enviar } = useGameSocket(sala)
   const pantalla = useJuego((s) => s.pantalla)
+  const cerrada = useJuego((s) => s.cerrada)
 
+  if (cerrada) return <AvisoConexion motivo={cerrada} />
   if (pantalla === 'final') return <PantallaVictoria />
   if (pantalla === 'juego') return <PantallaJuego enviar={enviar} />
   return <PantallaInicio enviar={enviar} />
