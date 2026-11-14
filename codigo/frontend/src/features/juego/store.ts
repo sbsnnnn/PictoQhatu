@@ -50,6 +50,8 @@ function aplicar(s: EstadoJuego, m: MensajeServidor): Partial<EstadoJuego> {
     case 'confirm':
       return { confirm: m.prompt }
     case 'role_swap':
+      // Al reconectar en el Modo B el servidor reenvía el role_swap: mismo asiento, no se borra lo ya armado
+      if (s.seat === m.seat) return { pedido: m.order }
       return {
         seat: m.seat,
         round: null,
