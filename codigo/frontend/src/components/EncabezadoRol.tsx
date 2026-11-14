@@ -9,16 +9,16 @@ const PICTO_ROL = { cliente: '/pictos/quiero.png?v=5441', vendedor: '/pictos/pon
 export function EncabezadoRol({ seat }: { seat: Seat }) {
   const cliente = seat === 'cliente'
   return (
-    <header className={`textil relative shrink-0 px-4 pt-2 pb-10 sm:px-8 sm:pt-4 sm:pb-16 ${cliente ? 'bg-qhatu' : 'bg-indigo'}`}>
-      <h1 className="inline-flex items-center gap-3 rounded-pildora border-4 border-blanco py-1.5 pr-6 pl-1.5 text-blanco sm:gap-4 sm:pr-8">
-        <span className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-pildora border-4 border-tinta bg-crema sm:size-20">
+    <header className={`textil relative shrink-0 px-4 pt-2 pb-7 bajo:pb-5 sm:px-8 sm:pb-8 ${cliente ? 'bg-qhatu' : 'bg-indigo'}`}>
+      <h1 className="inline-flex items-center gap-3 rounded-pildora border-4 border-blanco py-1.5 bajo:py-1 pr-6 pl-1.5 text-blanco sm:gap-4 sm:pr-8">
+        <span className="grid size-14 shrink-0 bajo:size-12 place-items-center overflow-hidden rounded-pildora border-4 border-tinta bg-crema sm:size-[4.25rem]">
           <img src={PICTO_ROL[seat]} alt="" className="size-full object-contain p-1.5" />
         </span>
         {cliente ? <IconoCanasta className="size-9 sm:size-11" /> : <IconoPuesto className="size-9 sm:size-11" />}
         <span className="font-titulo text-[1.75rem] font-black tracking-wide sm:text-4xl">{cliente ? 'CLIENTE' : 'VENDEDOR'}</span>
         <span className="sr-only">{cliente ? ': tú pides la comida' : ': tú preparas la comida'}</span>
       </h1>
-      <Onda abajo />
+      <Onda abajo alto="h-8 sm:h-10" />
     </header>
   )
 }
