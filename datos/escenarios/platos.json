@@ -1,0 +1,183 @@
+{
+  "ensalada_frutas": {
+    "nombre": "Ensalada de frutas",
+    "nivel": 1,
+    "ingredientes": [
+      "manzana",
+      "platano",
+      "naranja"
+    ],
+    "pasos": [
+      [
+        "CORTAR",
+        "manzana"
+      ],
+      [
+        "CORTAR",
+        "platano"
+      ],
+      [
+        "CORTAR",
+        "naranja"
+      ],
+      [
+        "MEZCLAR",
+        null
+      ]
+    ],
+    "precedencias": {
+      "3": [
+        0,
+        1,
+        2
+      ]
+    }
+  },
+  "arroz_con_pollo": {
+    "nombre": "Arroz con pollo",
+    "nivel": 1,
+    "ingredientes": [
+      "arroz",
+      "pollo",
+      "zanahoria"
+    ],
+    "pasos": [
+      [
+        "PONER",
+        "arroz"
+      ],
+      [
+        "PONER",
+        "pollo"
+      ],
+      [
+        "PONER",
+        "zanahoria"
+      ],
+      [
+        "MEZCLAR",
+        null
+      ]
+    ],
+    "precedencias": {
+      "3": [
+        0,
+        1,
+        2
+      ]
+    }
+  },
+  "sandwich": {
+    "nombre": "Sándwich",
+    "nivel": 2,
+    "ingredientes": [
+      "pan",
+      "pollo",
+      "lechuga",
+      "tomate"
+    ],
+    "pasos": [
+      [
+        "PONER",
+        "pan"
+      ],
+      [
+        "PONER",
+        "pollo"
+      ],
+      [
+        "PONER",
+        "lechuga"
+      ],
+      [
+        "PONER",
+        "tomate"
+      ]
+    ],
+    "precedencias": {
+      "1": [
+        0
+      ],
+      "2": [
+        1
+      ],
+      "3": [
+        2
+      ]
+    }
+  },
+  "ensalada": {
+    "nombre": "Ensalada",
+    "nivel": 2,
+    "ingredientes": [
+      "lechuga",
+      "tomate",
+      "zanahoria",
+      "palta"
+    ],
+    "pasos": [
+      [
+        "CORTAR",
+        "lechuga"
+      ],
+      [
+        "CORTAR",
+        "tomate"
+      ],
+      [
+        "CORTAR",
+        "zanahoria"
+      ],
+      [
+        "PONER",
+        "palta"
+      ]
+    ],
+    "precedencias": {
+      "3": [
+        0,
+        1,
+        2
+      ]
+    }
+  },
+  "desayuno": {
+    "nombre": "Desayuno",
+    "nivel": 2,
+    "ingredientes": [
+      "pan",
+      "queso",
+      "huevo",
+      "leche"
+    ],
+    "pasos": [
+      [
+        "PONER",
+        "pan"
+      ],
+      [
+        "PONER",
+        "queso"
+      ],
+      [
+        "PONER",
+        "huevo"
+      ],
+      [
+        "PONER",
+        "leche"
+      ]
+    ],
+    "precedencias": {
+      "1": [
+        0
+      ],
+      "2": [
+        1
+      ],
+      "3": [
+        2
+      ]
+    }
+  }
+}
