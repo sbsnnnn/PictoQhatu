@@ -139,7 +139,8 @@ class GameSession:
         if valor == "SI":
             self.tramo += 1
             self.env = _entorno_modo_b(self.rng, self.rng.choice(list(PLATOS)))
-            return [RoleSwap(seat=self.seat)] + self.start_round()
+            pedido = [picto("QUIERO"), picto(self.env.d)]
+            return [RoleSwap(seat=self.seat, order=pedido)] + self.start_round()
         self.env = EntornoPictoCocina(self.rng)    # [NO]: el pedido se reinicia, no cuenta error
         return [Feedback(ok=True, npc=[picto("SI")])] + self.start_round()
 

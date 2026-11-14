@@ -64,7 +64,7 @@ export type MensajeServidor =
     }
   | { type: 'feedback'; ok: boolean; npc: Picto[]; option_id: string | null }
   | { type: 'confirm'; prompt: Picto[] }
-  | { type: 'role_swap'; seat: Seat }
+  | { type: 'role_swap'; seat: Seat; order: Picto[] } // order: lo que pide la IA clienta [QUIERO, plato]
   | { type: 'phase_change'; phase: Fase }
   | { type: 'game_over'; victory: boolean; summary: Summary }
   | { type: 'error'; message: string }

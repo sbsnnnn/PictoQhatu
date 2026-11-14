@@ -168,7 +168,7 @@ export function crearMock(alRecibir: (m: MensajeServidor) => void): Conexion {
           return
         }
         seat = 'vendedor'
-        emitir({ type: 'role_swap', seat }, 150)
+        emitir({ type: 'role_swap', seat, order: [P.QUIERO, P.sandwich] }, 150)
         rondas = tramoB()
         siguiente()
         return

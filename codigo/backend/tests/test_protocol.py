@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from backend.app.game.protocol import Hint, Join, Round, Tap, mensaje_cliente
+from backend.app.game.protocol import Hint, Join, RoleSwap, Round, Tap, mensaje_cliente
 
 
 def test_discrimina_mensajes_del_cliente():
@@ -31,3 +31,12 @@ def test_round_serializa_como_el_contrato():
               hint=Hint(action="a2", kind="resaltar", target="pan"))
     d = r.model_dump()
     assert d["type"] == "round" and d["hint"]["target"] == "pan" and d["hint"]["attribute"] is None
+
+
+def test_role_swap_lleva_el_pedido_de_la_ia():
+    pedido = [{"id": "QUIERO", "label": "QUIERO", "img": "/pictos/quiero.png"},
+              {"id": "ensalada", "label": "ENSALADA", "img": "/pictos/ensalada.png"}]
+    d = RoleSwap(seat="vendedor", order=pedido).model_dump()
+    assert d == {"type": "role_swap", "seat": "vendedor", "order": pedido}
+    with pytest.raises(ValidationError):
+        RoleSwap(seat="vendedor")                          # sin pedido el vendedor no sabe qué preparar

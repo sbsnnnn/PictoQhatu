@@ -67,6 +67,7 @@ def test_partida_a_confirm_b_hasta_victoria():
     assert confirm.prompt[0].id == "QUIERO" and confirm.prompt[1].id in PLATOS
     swap = tipos.index(RoleSwap)
     assert todos[swap].seat == "vendedor"
+    assert [p.id for p in todos[swap].order] == ["QUIERO", sesion.env.d]   # la IA clienta pide el plato de B
     assert all(m.seat == "cliente" and m.phase == 1 for m in todos[:swap] if isinstance(m, Round))
     primera_b = todos[swap + 1]
     assert isinstance(primera_b, Round) and primera_b.seat == "vendedor" and primera_b.phase == 2

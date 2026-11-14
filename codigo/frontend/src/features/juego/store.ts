@@ -1,6 +1,7 @@
 // Estado de la partida derivado solo de los mensajes del servidor. El front nunca calcula aciertos.
 import { create } from 'zustand'
 import type { Fase, MensajeServidor, Picto, Round, Seat, Summary } from '../../lib/protocol'
+import { textoFrase } from '../../lib/tts'
 
 type Feedback = Extract<MensajeServidor, { type: 'feedback' }>
 
@@ -11,6 +12,8 @@ export interface EstadoJuego {
   round: Round | null
   feedback: Feedback | null
   confirm: Picto[] | null
+  /** Lo que pide la IA clienta en el Modo B; queda a la vista mientras el jugador prepara. */
+  pedido: Picto[] | null
   /** Frase que se dice una vez antes del próximo prompt (cambio de rol o de fase). */
   aviso: string | null
   /** Aviso que acompaña a la ronda actual (se dice antes de su prompt). */
@@ -39,7 +42,8 @@ function aplicar(s: EstadoJuego, m: MensajeServidor): Partial<EstadoJuego> {
       return {
         seat: m.seat,
         round: null,
-        aviso: m.seat === 'vendedor' ? 'Ahora tú preparas la comida' : 'Ahora tú pides la comida',
+        pedido: m.order,
+        aviso: `${m.seat === 'vendedor' ? 'Ahora tú preparas la comida' : 'Ahora tú pides la comida'}. ${textoFrase(m.order)}`,
       }
     case 'phase_change':
       return { phase: m.phase, round: null, aviso: m.phase === 3 ? 'Ahora arma el plato tú solo' : null }
@@ -59,6 +63,7 @@ export const useJuego = create<EstadoJuego>()((set, get) => ({
   round: null,
   feedback: null,
   confirm: null,
+  pedido: null,
   aviso: null,
   avisoRonda: null,
   victory: false,

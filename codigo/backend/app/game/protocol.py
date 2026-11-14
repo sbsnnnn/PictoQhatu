@@ -121,6 +121,7 @@ class Confirm(_Mensaje):
 class RoleSwap(_Mensaje):
     type: Literal["role_swap"] = "role_swap"
     seat: Seat                  # asiento nuevo del jugador
+    order: list[Picto]          # lo que pide la IA clienta: [QUIERO, plato del Modo B]
 
 
 class PhaseChange(_Mensaje):
