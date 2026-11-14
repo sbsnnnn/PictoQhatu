@@ -16,12 +16,11 @@ import { useJuego } from './store'
 export function PantallaVictoria() {
   const victory = useJuego((s) => s.victory)
   const summary = useJuego((s) => s.summary)
-  const armado = useJuego((s) => s.plato)
   const reducir = useReducedMotion() ?? false
   const plato = summary?.plato
   const nombre = plato?.label ?? ''
-  // Sin victoria, los ingredientes salen de la receta (último picto de cada paso: PONER + PAN → PAN)
-  const ingredientes = victory ? armado : (summary?.solucion ?? []).map((o) => o.pictos[o.pictos.length - 1])
+  // Con victoria se ve el plato terminado; sin ella, la receta: el último picto de cada paso (PONER + PAN → PAN)
+  const ingredientes = victory ? [] : (summary?.solucion ?? []).map((o) => o.pictos[o.pictos.length - 1])
   const frase = victory ? `¡Listo! Preparaste ${nombre}` : `Así se prepara ${nombre}. Lo hacemos juntos otra vez`
 
   useEffect(() => {
@@ -60,7 +59,7 @@ export function PantallaVictoria() {
             className="relative z-10 -mb-[calc(var(--d)*0.2)] grid size-(--d) max-sm:order-last max-sm:col-span-2 shrink-0 place-items-center rounded-full border-4 border-tinta bg-blanco shadow-suave"
           >
             <div className="grid size-[88%] place-items-center rounded-full bg-crema">
-              {plato && <TarjetaPlato plato={plato} ingredientes={ingredientes} numerar={!victory} />}
+              {plato && <TarjetaPlato plato={plato} ingredientes={ingredientes} />}
             </div>
           </motion.div>
           <Personaje rol="vendedor" className="h-[calc(var(--d)*0.62)] max-w-(--pj) max-sm:h-[20cqh] max-sm:max-w-none" />
@@ -82,22 +81,23 @@ export function PantallaVictoria() {
   )
 }
 
-/** Tarjeta del plato: sus ingredientes en 2×2 y el nombre. Cuadrada y al 70 % del círculo crema: las esquinas quedan dentro. */
-function TarjetaPlato({ plato, ingredientes, numerar }: { plato: Picto; ingredientes: Picto[]; numerar: boolean }) {
+/**
+ * Tarjeta del plato: el pictograma del plato y su nombre, o la receta numerada en 2×2 si hay ingredientes.
+ * Cuadrada y al 70 % del círculo crema: las esquinas quedan dentro.
+ */
+function TarjetaPlato({ plato, ingredientes }: { plato: Picto; ingredientes: Picto[] }) {
   return (
     <div className="@container flex aspect-square w-[70%] flex-col items-center gap-1 rounded-tarjeta border-4 border-tinta bg-crema px-[3%] py-[5%]">
       {ingredientes.length > 0 ? (
-        // El orden importa: es la receta (sin victoria se ve numerada)
+        // La receta es una secuencia: aquí sí van números
         <ol className="grid min-h-0 w-full flex-1 grid-cols-2 grid-rows-2 gap-1" aria-label={`Ingredientes de ${plato.label}`}>
           {ingredientes.slice(0, 4).map((p, i) => (
             <li key={`${p.id}-${i}`} className="relative flex min-h-0 min-w-0">
               <ImagenPicto picto={p} className="min-h-0 w-full" />
               <span className="sr-only">{p.label}</span>
-              {numerar && (
-                <span aria-hidden className="absolute top-0 left-0 grid size-7 place-items-center rounded-full border-2 border-tinta bg-blanco text-base font-bold">
-                  {i + 1}
-                </span>
-              )}
+              <span aria-hidden className="absolute top-0 left-0 grid size-7 place-items-center rounded-full border-2 border-tinta bg-blanco text-base font-bold">
+                {i + 1}
+              </span>
             </li>
           ))}
         </ol>
