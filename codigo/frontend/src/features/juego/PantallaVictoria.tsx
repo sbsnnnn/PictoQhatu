@@ -50,7 +50,7 @@ export function PantallaVictoria() {
 
         {/* Escena: los dos personajes a los lados; el plato baja un 20 % sobre el mostrador.
             En teléfono no caben a los lados: van juntos encima del plato. */}
-        <main className="relative flex items-end justify-center gap-[3cqw] px-4 max-sm:grid max-sm:grid-cols-2 max-sm:content-end max-sm:justify-items-center">
+        <main className="relative flex items-end justify-center gap-[3cqw] px-4 xl:gap-8 max-sm:grid max-sm:grid-cols-2 max-sm:content-end max-sm:justify-items-center">
           <Personaje rol="cliente" className="h-[calc(var(--d)*0.62)] max-w-(--pj) max-sm:h-[20cqh] max-sm:max-w-none" />
           <motion.div
             initial={reducir ? { opacity: 0 } : { opacity: 0, y: 12 }}

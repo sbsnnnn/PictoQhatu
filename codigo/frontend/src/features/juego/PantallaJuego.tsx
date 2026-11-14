@@ -131,12 +131,13 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
         {[avisoRonda, pista].filter(Boolean).join('. ')}
       </p>
 
-      {/* Tablet horizontal: personaje | tarjetas | panel. Una columna en móvil y tablet vertical. */}
-      <main className="flex min-h-0 flex-1 flex-col gap-3 px-4 pt-3 bajo:gap-2 bajo:pt-2 lg:grid lg:grid-cols-[minmax(15rem,23rem)_minmax(26rem,1fr)_minmax(10rem,13rem)] lg:grid-rows-[minmax(0,1fr)] lg:gap-x-6 lg:px-6 lg:pt-4">
+      {/* Tablet horizontal: personaje | tarjetas | panel. Una columna en móvil y tablet vertical.
+          En escritorio (xl) el bloque se centra con 1280 px como máximo: el encabezado y la barra siguen a todo el ancho. */}
+      <main className="flex min-h-0 flex-1 flex-col gap-3 px-4 pt-3 bajo:gap-2 bajo:pt-2 lg:grid lg:grid-cols-[minmax(15rem,23rem)_minmax(26rem,1fr)_minmax(10rem,13rem)] lg:grid-rows-[minmax(0,1fr)] lg:gap-x-6 lg:px-6 lg:pt-4 xl:mx-auto xl:w-full xl:max-w-[80rem]">
         <div className="flex shrink-0 flex-col gap-5 lg:min-h-0 lg:justify-center">
           <section aria-live="polite" className="flex items-center gap-5 lg:flex-col lg:items-start">
             <div className="flex shrink-0 items-center gap-6 lg:ml-6">
-              <Personaje rol={ia} className="h-24 w-14 bajo:h-14 bajo:w-10 lg:h-36 lg:w-28" />
+              <Personaje rol={ia} className="h-24 w-14 bajo:h-14 bajo:w-10 lg:h-36 lg:w-28 xl:[@media(min-height:50rem)]:h-48 xl:[@media(min-height:50rem)]:w-36" />
               {/* Vendedor en tablet horizontal: la respuesta del cliente va junto a él y la burbuja sigue con el pedido */}
               {vendedor && feedback?.option_id && <Respuesta ok={feedback.ok} className="max-lg:hidden" />}
             </div>
@@ -180,7 +181,7 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
         {/* Tarjetas de tamaño fijo (proporción 220×244) que se achican solo si no caben; nunca se estiran */}
         <div className="min-h-0 flex-1 px-3 pt-4 pb-1 [container-type:size] lg:h-full">
           <ul
-              className="mx-auto flex h-full max-w-[calc(var(--carta)*2+var(--hueco))] flex-wrap content-center justify-center gap-(--hueco) [--carta:min(13.75rem,calc((100cqw-var(--hueco))/2),calc((100cqh-var(--hueco))/2*0.9))] [--hueco:1rem] lg:[--hueco:1.5rem]"
+              className="mx-auto flex h-full max-w-[calc(var(--carta)*2+var(--hueco))] flex-wrap content-center justify-center gap-(--hueco) [--carta:min(13.75rem,calc((100cqw-var(--hueco))/2),calc((100cqh-var(--hueco))/2*0.9))] [--hueco:1rem] lg:[--hueco:1.5rem] xl:[--carta:min(16.25rem,calc((100cqw-var(--hueco))/2),calc((100cqh-var(--hueco))/2*0.9))]"
             >
               {round?.options.slice(0, 4).map((o) => (
                 <li key={o.id} className="aspect-[220/244] w-(--carta)">
