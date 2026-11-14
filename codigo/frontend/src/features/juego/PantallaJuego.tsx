@@ -108,9 +108,10 @@ export function PantallaJuego({ enviar }: { enviar: (m: MensajeCliente) => void 
   const paso = vendedor && round && !confirm ? round.prompt : null
   const hecho = vendedor && !!feedback?.ok && !!feedback.option_id
   const ayuda = !feedback && !confirm ? round?.hint : null
-  const pista = ayuda?.action === 'a5' ? ayuda.speech : ''
+  // a5 sin atributo útil llega como kind 'repetir' (el servidor repite el prompt): se dibuja como a1
+  const pista = ayuda?.kind === 'atributo' ? ayuda.speech : ''
   // a1 (volver a decir): la frase dicha se enmarca en maíz mientras dura la ronda
-  const eco = ayuda?.action === 'a1' ? 'ring-8 ring-maiz' : ''
+  const eco = ayuda?.kind === 'repetir' ? 'ring-8 ring-maiz' : ''
   // En tablet horizontal la burbuja muestra la pista (como en el diseño): ¡MIRA! + el picto de la respuesta (a2/a4)
   // o el atributo (a5). En una columna el a5 ocupa el lugar del plato o la canasta: no le quita alto a las tarjetas.
   const mira = ayuda?.target ? round?.options.find((o) => o.id === ayuda.target)?.pictos.at(-1) : undefined
