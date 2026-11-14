@@ -4,6 +4,7 @@ import { PantallaInicio } from './features/juego/PantallaInicio'
 import { PantallaJuego } from './features/juego/PantallaJuego'
 import { PantallaVictoria } from './features/juego/PantallaVictoria'
 import { useJuego } from './features/juego/store'
+import { nuevoId } from './lib/id'
 import { useGameSocket } from './lib/socket'
 
 const CLAVE_SALA = 'pictoqhatu.sala'
@@ -15,11 +16,11 @@ function salaInicial() {
   try {
     const guardada = sessionStorage.getItem(CLAVE_SALA)
     if (guardada) return guardada
-    const nueva = crypto.randomUUID()
+    const nueva = nuevoId()
     sessionStorage.setItem(CLAVE_SALA, nueva)
     return nueva
   } catch {
-    return crypto.randomUUID()
+    return nuevoId()
   }
 }
 
