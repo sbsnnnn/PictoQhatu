@@ -3,3 +3,8 @@ node_modules/
 __pycache__/
 .env
 dist/
+CLAUDE.md
+.claude/
+.ruff_cache/
+.pytest_cache/
+datos/modelos/prueba_rapida/

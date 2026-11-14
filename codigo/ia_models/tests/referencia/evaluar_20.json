@@ -1,0 +1,44 @@
+{
+ "rapido|regla_fija": {
+  "exito": 1.0,
+  "turnos": 12.7,
+  "ayudas": 1,
+  "errores": 1,
+  "recompensa": 21.1
+ },
+ "rapido|q": {
+  "exito": 1.0,
+  "turnos": 12.65,
+  "ayudas": 0.7,
+  "errores": 0.95,
+  "recompensa": 21.15
+ },
+ "distraido|regla_fija": {
+  "exito": 1.0,
+  "turnos": 17.25,
+  "ayudas": 5.55,
+  "errores": 5.55,
+  "recompensa": 18.37
+ },
+ "distraido|q": {
+  "exito": 1.0,
+  "turnos": 15,
+  "ayudas": 6.9,
+  "errores": 3.3,
+  "recompensa": 13.605
+ },
+ "confunde|regla_fija": {
+  "exito": 1.0,
+  "turnos": 19.45,
+  "ayudas": 7.75,
+  "errores": 7.75,
+  "recompensa": 17.05
+ },
+ "confunde|q": {
+  "exito": 1.0,
+  "turnos": 16.55,
+  "ayudas": 6,
+  "errores": 4.8,
+  "recompensa": 15.89
+ }
+}

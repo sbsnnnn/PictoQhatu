@@ -1,0 +1,166 @@
+{
+  "ingredientes": {
+    "pan": {
+      "etiqueta": "PAN",
+      "categoria": "cereal",
+      "color": "marrón",
+      "arasaac_id": 2494,
+      "img": "/pictos/pan.png"
+    },
+    "pollo": {
+      "etiqueta": "POLLO",
+      "categoria": "proteína",
+      "color": "marrón",
+      "arasaac_id": 4952,
+      "img": "/pictos/pollo.png"
+    },
+    "lechuga": {
+      "etiqueta": "LECHUGA",
+      "categoria": "verdura",
+      "color": "verde",
+      "arasaac_id": 2446,
+      "img": "/pictos/lechuga.png"
+    },
+    "tomate": {
+      "etiqueta": "TOMATE",
+      "categoria": "verdura",
+      "color": "rojo",
+      "arasaac_id": 2594,
+      "img": "/pictos/tomate.png"
+    },
+    "zanahoria": {
+      "etiqueta": "ZANAHORIA",
+      "categoria": "verdura",
+      "color": "naranja",
+      "arasaac_id": 2619,
+      "img": "/pictos/zanahoria.png"
+    },
+    "palta": {
+      "etiqueta": "PALTA",
+      "categoria": "fruta",
+      "color": "verde",
+      "arasaac_id": 8009,
+      "img": "/pictos/palta.png"
+    },
+    "manzana": {
+      "etiqueta": "MANZANA",
+      "categoria": "fruta",
+      "color": "rojo",
+      "arasaac_id": 2462,
+      "img": "/pictos/manzana.png"
+    },
+    "platano": {
+      "etiqueta": "PLÁTANO",
+      "categoria": "fruta",
+      "color": "amarillo",
+      "arasaac_id": 2530,
+      "img": "/pictos/platano.png"
+    },
+    "naranja": {
+      "etiqueta": "NARANJA",
+      "categoria": "fruta",
+      "color": "naranja",
+      "arasaac_id": 2483,
+      "img": "/pictos/naranja.png"
+    },
+    "huevo": {
+      "etiqueta": "HUEVO",
+      "categoria": "proteína",
+      "color": "blanco",
+      "arasaac_id": 2427,
+      "img": "/pictos/huevo.png"
+    },
+    "leche": {
+      "etiqueta": "LECHE",
+      "categoria": "lácteo",
+      "color": "blanco",
+      "arasaac_id": 2445,
+      "img": "/pictos/leche.png"
+    },
+    "queso": {
+      "etiqueta": "QUESO",
+      "categoria": "lácteo",
+      "color": "amarillo",
+      "arasaac_id": 2541,
+      "img": "/pictos/queso.png"
+    },
+    "arroz": {
+      "etiqueta": "ARROZ",
+      "categoria": "cereal",
+      "color": "blanco",
+      "arasaac_id": 39387,
+      "img": "/pictos/arroz.png"
+    }
+  },
+  "acciones": {
+    "QUIERO": {
+      "etiqueta": "QUIERO",
+      "arasaac_id": 5441,
+      "img": "/pictos/quiero.png"
+    },
+    "PREPARAR": {
+      "etiqueta": "PREPARAR",
+      "arasaac_id": 6190,
+      "img": "/pictos/preparar.png"
+    },
+    "PONER": {
+      "etiqueta": "PONER",
+      "arasaac_id": 32757,
+      "img": "/pictos/poner.png"
+    },
+    "CORTAR": {
+      "etiqueta": "CORTAR",
+      "arasaac_id": 5975,
+      "img": "/pictos/cortar.png"
+    },
+    "MEZCLAR": {
+      "etiqueta": "MEZCLAR",
+      "arasaac_id": 5515,
+      "img": "/pictos/mezclar.png"
+    }
+  },
+  "control": {
+    "SI": {
+      "etiqueta": "SÍ",
+      "arasaac_id": 5584,
+      "img": "/pictos/si.png"
+    },
+    "NO": {
+      "etiqueta": "NO",
+      "arasaac_id": 5526,
+      "img": "/pictos/no.png"
+    },
+    "AYUDA": {
+      "etiqueta": "AYUDA",
+      "arasaac_id": 12252,
+      "img": "/pictos/ayuda.png"
+    }
+  },
+  "platos": {
+    "ensalada_frutas": {
+      "etiqueta": "ENSALADA DE FRUTAS",
+      "arasaac_id": 8620,
+      "img": "/pictos/ensalada_frutas.png"
+    },
+    "arroz_con_pollo": {
+      "etiqueta": "ARROZ CON POLLO",
+      "arasaac_id": 27945,
+      "img": "/pictos/arroz_con_pollo.png"
+    },
+    "sandwich": {
+      "etiqueta": "SÁNDWICH",
+      "arasaac_id": 3383,
+      "img": "/pictos/sandwich.png"
+    },
+    "ensalada": {
+      "etiqueta": "ENSALADA",
+      "arasaac_id": 2377,
+      "img": "/pictos/ensalada.png"
+    },
+    "desayuno": {
+      "etiqueta": "DESAYUNO",
+      "arasaac_id": 4626,
+      "img": "/pictos/desayuno.png"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+/* Tokens de diseño (CLAUDE.md §8). Los componentes usan estas clases, nunca hex a mano. */
+@theme {
+  --color-qhatu: #9e1b32; /* rol cliente, encabezado — texto blanco 7.9:1 */
+  --color-maiz: #ffc72c; /* botón principal — texto tinta 10.8:1 */
+  --color-naranja: #f28c28; /* [AYUDA], acentos — texto tinta 6.9:1 */
+  --color-indigo: #3f4fb8; /* rol vendedor — texto blanco 7.0:1 */
+  --color-verde: #15803d; /* acierto, [SÍ] — texto blanco 5.0:1 */
+  --color-morado: #6d28d9; /* panel del educador — texto blanco 7.1:1 */
+  --color-crema: #fff8ec; /* fondo de tarjetas y área de juego */
+  --color-tinta: #1f1a2e; /* texto y bordes — sobre crema 16:1 */
+  --color-blanco: #ffffff;
+
+  --font-texto: 'Andika', 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --font-titulo: 'Nunito', 'Andika', system-ui, sans-serif;
+
+  --radius-tarjeta: 1.75rem;
+  --radius-pildora: 999px;
+
+  /* Sombra "de bloque": desplazada y sin difuminar, como una pieza encajada */
+  --shadow-bloque: 0 6px 0 0 var(--color-tinta);
+  --shadow-bloque-sm: 0 3px 0 0 var(--color-tinta);
+  /* Sombra de bloque suave del área de juego (tarjetas, burbuja, barra inferior) */
+  --shadow-suave: 0 8px 0 0 rgb(31 26 46 / 0.2);
+  --shadow-suave-sm: 0 5px 0 0 rgb(31 26 46 / 0.2);
+
+  /* Objetivo táctil mínimo en el juego (§2) */
+  --spacing-toque: 96px;
+}

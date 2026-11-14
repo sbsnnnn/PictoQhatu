@@ -1,0 +1,17 @@
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+extend-exclude = [".venv", "frontend"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+# E741: "I" (ingredientes elegidos) es la notación del documento.
+ignore = ["E741"]
+
+[tool.ruff.lint.per-file-ignores]
+# Port 1:1 del MVP: no se reescribe su lógica por estilo.
+"ia_models/env/entorno.py" = ["B007"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["ia_models/tests", "backend/tests"]

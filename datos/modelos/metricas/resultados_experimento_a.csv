@@ -1,0 +1,7 @@
+perfil,agente,tasa_exito,turnos_prom,ayudas_prom,errores_prom,recompensa_prom
+Rápido,Baseline (regla fija),1.0,12.8,1.09,1.09,21.06
+Rápido,Baseline + Q-Learning,1.0,12.83,0.72,1.12,21.21
+Distraído,Baseline (regla fija),1.0,17.54,5.83,5.83,18.03
+Distraído,Baseline + Q-Learning,1.0,18.01,4.69,6.3,18.84
+Confunde colores,Baseline (regla fija),1.0,19.33,7.6,7.6,17.05
+Confunde colores,Baseline + Q-Learning,0.99,18.14,5.3,6.38,17.96
