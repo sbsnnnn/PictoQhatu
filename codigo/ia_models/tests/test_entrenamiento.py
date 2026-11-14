@@ -99,3 +99,12 @@ def test_ejecutar_rapido_escribe_csv_y_png(tmp_path):
     for nombre in ("recompensa", "exito", "convergencia_q", "sensibilidad_alfa", "sensibilidad_gamma"):
         assert (curvas / f"{nombre}.png").stat().st_size > 0
     assert not (tmp_path / "tabla_q.npy").exists()
+
+
+def test_rapido_no_escribe_en_la_carpeta_de_la_corrida_completa(monkeypatch):
+    llamadas = []
+    monkeypatch.setattr(ent, "ejecutar", lambda **kw: llamadas.append(kw))
+    monkeypatch.setattr("sys.argv", ["entrenamiento", "--rapido"])
+    ent.main()
+    assert llamadas[0]["salida"] == ent.SALIDA_RAPIDA
+    assert ent.SALIDA_RAPIDA != ent.Path(ent.CARPETA_DATOS)

@@ -11,6 +11,7 @@ Curvas y métricas del Hito 2 para el informe de modelado.
      y gamma en {0.8, 0.9, 0.99} con alfa=0.1 (alfa_final = alfa/10, como el MVP).
 
 Salidas: datos/modelos/curvas/*.png y datos/modelos/metricas/*.csv.
+Con --rapido van a datos/modelos/prueba_rapida/ para no pisar la corrida completa.
 No toca tabla_q.npy ni tabla_q.csv (los genera experimento_a).
 
 Uso (desde la carpeta codigo/):
@@ -37,6 +38,7 @@ from ia_models.env.entorno import EntornoPictoCocina  # noqa: E402
 from ia_models.env.jugador_simulado import PERFILES, JugadorSimulado  # noqa: E402
 from ia_models.experimentos.experimento_a import CARPETA_DATOS, evaluar  # noqa: E402
 
+SALIDA_RAPIDA = Path(CARPETA_DATOS) / "prueba_rapida"   # ignorada por git
 SEMILLA_ENTRENAMIENTO = 42
 SEMILLA_EVALUACION = 2026
 ALFAS = (0.05, 0.1, 0.2)
@@ -263,8 +265,8 @@ def main():
     parser.add_argument("--episodios", type=int, default=30000, help="episodios por entrenamiento")
     parser.add_argument("--rapido", action="store_true", help="prueba corta: 300 episodios, 10 partidas")
     args = parser.parse_args()
-    if args.rapido:
-        ejecutar(episodios=300, partidas=10)
+    if args.rapido:   # carpeta aparte: no pisa las curvas de la corrida completa
+        ejecutar(episodios=300, partidas=10, salida=SALIDA_RAPIDA)
     else:
         ejecutar(episodios=args.episodios)
 
