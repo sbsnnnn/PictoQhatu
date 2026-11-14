@@ -1,0 +1,163 @@
+f,e,h,t,u,a0 sin ayuda,a1 repetir por voz,a2 resaltar,a3 reducir opciones,a4 mostrar respuesta,a5 pista por atributo,mejor_accion
+1,0,0,rapido,color,7.083,5.07,4.682,5.296,4.774,5.273,a0 sin ayuda
+1,0,0,rapido,categoria,6.596,6.055,6.233,6.293,6.032,6.018,a0 sin ayuda
+1,0,0,rapido,otro,7.376,6.902,6.836,6.798,6.543,6.946,a0 sin ayuda
+1,0,0,lento,color,6.446,5.929,5.581,5.679,5.73,5.76,a0 sin ayuda
+1,0,0,lento,categoria,6.452,6.095,6.077,6.119,5.914,5.872,a0 sin ayuda
+1,0,0,lento,otro,6.641,6.327,6.295,6.199,6.043,6.32,a0 sin ayuda
+1,0,1,rapido,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,0,1,rapido,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,0,1,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,0,1,lento,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,0,1,lento,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,0,1,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,0,2,rapido,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,0,2,rapido,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,0,2,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,0,2,lento,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,0,2,lento,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,0,2,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,1,0,rapido,color,7.025,4.359,5.434,4.791,4.076,4.335,a0 sin ayuda
+1,1,0,rapido,categoria,6.116,5.976,6.166,6.184,5.94,6.421,a5 pista por atributo
+1,1,0,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,1,0,lento,color,5.438,5.983,5.888,5.884,5.409,6.411,a5 pista por atributo
+1,1,0,lento,categoria,5.93,6.109,6.294,6.109,5.953,6.196,a2 resaltar
+1,1,0,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,1,1,rapido,color,1.763,2.392,2.625,2.434,5.379,1.098,a4 mostrar respuesta
+1,1,1,rapido,categoria,6.154,2.894,4.362,5.616,5.53,5.009,a0 sin ayuda
+1,1,1,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,1,1,lento,color,6.268,2.852,1.89,2.603,3.874,2.645,a0 sin ayuda
+1,1,1,lento,categoria,6.37,4.94,5.832,5.259,5.385,5.126,a0 sin ayuda
+1,1,1,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,1,2,rapido,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,1,2,rapido,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,1,2,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,1,2,lento,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,1,2,lento,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,1,2,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,2,0,rapido,color,0.686,3.069,0.387,0.0,0.29,0.42,a1 repetir por voz
+1,2,0,rapido,categoria,3.257,4.086,6.122,4.212,2.77,4.444,a2 resaltar
+1,2,0,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,2,0,lento,color,0.753,0.873,1.068,0.932,4.582,0.433,a4 mostrar respuesta
+1,2,0,lento,categoria,3.012,6.0,3.547,3.56,2.952,3.166,a1 repetir por voz
+1,2,0,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,2,1,rapido,color,1.543,1.476,5.707,1.831,0.703,0.778,a2 resaltar
+1,2,1,rapido,categoria,6.558,2.558,4.381,4.515,5.582,4.375,a0 sin ayuda
+1,2,1,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,2,1,lento,color,3.296,2.453,2.917,2.056,6.092,2.973,a4 mostrar respuesta
+1,2,1,lento,categoria,6.556,4.584,4.458,4.633,4.934,5.362,a0 sin ayuda
+1,2,1,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,2,2,rapido,color,-0.271,1.784,0.512,0.815,0.0,0.0,a1 repetir por voz
+1,2,2,rapido,categoria,2.429,2.843,4.375,4.059,5.757,4.658,a4 mostrar respuesta
+1,2,2,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+1,2,2,lento,color,0.967,0.173,2.663,0.804,1.623,1.426,a2 resaltar
+1,2,2,lento,categoria,0.616,3.416,3.008,3.324,5.644,1.93,a4 mostrar respuesta
+1,2,2,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,0,0,rapido,color,7.864,7.311,7.598,7.29,7.27,7.386,a0 sin ayuda
+2,0,0,rapido,categoria,7.357,6.82,6.828,6.914,6.652,6.657,a0 sin ayuda
+2,0,0,rapido,otro,8.512,7.857,7.834,7.725,7.47,7.812,a0 sin ayuda
+2,0,0,lento,color,7.034,6.83,6.859,6.727,6.522,6.432,a0 sin ayuda
+2,0,0,lento,categoria,7.015,6.848,6.831,6.822,6.547,6.525,a0 sin ayuda
+2,0,0,lento,otro,6.748,6.558,6.472,6.543,6.279,6.538,a0 sin ayuda
+2,0,1,rapido,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,0,1,rapido,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,0,1,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,0,1,lento,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,0,1,lento,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,0,1,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,0,2,rapido,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,0,2,rapido,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,0,2,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,0,2,lento,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,0,2,lento,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,0,2,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,1,0,rapido,color,7.611,6.825,6.558,6.404,6.598,7.006,a0 sin ayuda
+2,1,0,rapido,categoria,6.727,6.741,6.809,6.877,6.65,7.128,a5 pista por atributo
+2,1,0,rapido,otro,8.334,3.539,4.412,4.356,3.877,5.226,a0 sin ayuda
+2,1,0,lento,color,6.336,6.637,6.634,6.588,6.503,6.772,a5 pista por atributo
+2,1,0,lento,categoria,6.548,6.609,6.625,6.601,6.455,6.771,a5 pista por atributo
+2,1,0,lento,otro,4.195,5.685,4.909,5.259,7.782,3.803,a4 mostrar respuesta
+2,1,1,rapido,color,7.543,3.438,5.028,5.933,5.667,4.314,a0 sin ayuda
+2,1,1,rapido,categoria,6.837,3.531,4.95,6.121,6.416,6.427,a0 sin ayuda
+2,1,1,rapido,otro,4.185,2.13,7.41,3.035,3.969,3.762,a2 resaltar
+2,1,1,lento,color,6.932,3.828,4.527,5.161,6.515,4.747,a0 sin ayuda
+2,1,1,lento,categoria,6.868,4.966,5.101,5.917,6.169,5.74,a0 sin ayuda
+2,1,1,lento,otro,4.274,2.427,1.219,4.134,7.547,1.92,a4 mostrar respuesta
+2,1,2,rapido,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,1,2,rapido,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,1,2,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,1,2,lento,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,1,2,lento,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,1,2,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+2,2,0,rapido,color,0.102,0.182,0.906,1.495,0.854,3.983,a5 pista por atributo
+2,2,0,rapido,categoria,4.69,5.341,6.305,6.862,6.185,6.223,a3 reducir opciones
+2,2,0,rapido,otro,0.0,0.724,0.289,0.93,0.806,4.488,a5 pista por atributo
+2,2,0,lento,color,3.198,2.038,3.489,1.879,3.13,6.406,a5 pista por atributo
+2,2,0,lento,categoria,4.251,6.659,4.059,5.001,4.691,4.651,a1 repetir por voz
+2,2,0,lento,otro,0.029,0.14,4.272,0.0,0.137,0.089,a2 resaltar
+2,2,1,rapido,color,3.223,3.199,3.418,6.613,2.481,2.741,a3 reducir opciones
+2,2,1,rapido,categoria,6.87,3.711,4.594,6.396,6.53,6.502,a0 sin ayuda
+2,2,1,rapido,otro,0.585,0.0,0.0,2.273,0.0,0.0,a3 reducir opciones
+2,2,1,lento,color,6.778,4.514,4.772,5.203,6.091,4.941,a0 sin ayuda
+2,2,1,lento,categoria,6.744,4.654,5.355,5.398,6.466,6.119,a0 sin ayuda
+2,2,1,lento,otro,1.553,0.975,1.144,5.637,0.579,0.324,a3 reducir opciones
+2,2,2,rapido,color,0.941,0.883,1.384,5.078,1.597,0.867,a3 reducir opciones
+2,2,2,rapido,categoria,2.881,2.993,5.164,6.013,6.419,5.505,a4 mostrar respuesta
+2,2,2,rapido,otro,0.0,0.0,1.976,0.0,0.327,0.089,a2 resaltar
+2,2,2,lento,color,1.512,2.664,3.512,4.602,5.785,1.988,a4 mostrar respuesta
+2,2,2,lento,categoria,2.616,4.219,5.257,4.673,6.287,4.948,a4 mostrar respuesta
+2,2,2,lento,otro,0.014,3.181,1.587,1.08,1.08,2.43,a1 repetir por voz
+3,0,0,rapido,color,9.703,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,0,rapido,categoria,9.199,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,0,rapido,otro,9.432,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,0,lento,color,8.697,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,0,lento,categoria,8.721,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,0,lento,otro,8.656,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,1,rapido,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,1,rapido,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,1,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,1,lento,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,1,lento,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,1,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,2,rapido,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,2,rapido,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,2,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,2,lento,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,2,lento,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,0,2,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,1,0,rapido,color,8.877,9.28,9.085,8.849,8.858,9.012,a1 repetir por voz
+3,1,0,rapido,categoria,8.539,8.224,8.452,8.892,8.474,8.637,a3 reducir opciones
+3,1,0,rapido,otro,8.971,8.569,8.675,8.55,8.273,8.665,a0 sin ayuda
+3,1,0,lento,color,8.318,8.498,8.36,8.343,8.559,8.833,a5 pista por atributo
+3,1,0,lento,categoria,8.605,8.718,8.496,8.585,8.526,8.831,a5 pista por atributo
+3,1,0,lento,otro,8.347,8.365,8.351,8.271,8.07,8.291,a1 repetir por voz
+3,1,1,rapido,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,1,1,rapido,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,1,1,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,1,1,lento,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,1,1,lento,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,1,1,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,1,2,rapido,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,1,2,rapido,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,1,2,rapido,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,1,2,lento,color,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,1,2,lento,categoria,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,1,2,lento,otro,0.0,0.0,0.0,0.0,0.0,0.0,a0 sin ayuda
+3,2,0,rapido,color,1.404,2.024,0.376,2.684,6.158,0.632,a4 mostrar respuesta
+3,2,0,rapido,categoria,8.458,8.071,8.294,8.489,8.488,8.506,a5 pista por atributo
+3,2,0,rapido,otro,8.462,8.072,8.201,8.228,8.109,8.686,a5 pista por atributo
+3,2,0,lento,color,5.733,4.592,3.751,3.601,4.402,8.193,a5 pista por atributo
+3,2,0,lento,categoria,7.96,8.147,8.069,8.125,8.13,8.127,a1 repetir por voz
+3,2,0,lento,otro,8.363,8.363,8.383,8.368,7.973,8.041,a2 resaltar
+3,2,1,rapido,color,3.395,1.952,7.659,4.39,3.454,2.771,a2 resaltar
+3,2,1,rapido,categoria,7.773,4.513,6.607,7.349,8.179,6.148,a4 mostrar respuesta
+3,2,1,rapido,otro,8.442,5.989,6.924,7.468,7.93,7.028,a0 sin ayuda
+3,2,1,lento,color,7.365,6.348,7.287,6.488,8.547,7.241,a4 mostrar respuesta
+3,2,1,lento,categoria,8.421,6.002,6.963,7.309,8.15,7.646,a0 sin ayuda
+3,2,1,lento,otro,8.585,6.581,6.998,6.964,7.982,7.515,a0 sin ayuda
+3,2,2,rapido,color,2.327,0.093,0.0,0.0,1.325,0.837,a0 sin ayuda
+3,2,2,rapido,categoria,4.642,4.774,7.573,5.856,7.845,5.188,a4 mostrar respuesta
+3,2,2,rapido,otro,-0.236,0.393,6.527,4.364,3.004,4.884,a2 resaltar
+3,2,2,lento,color,0.389,2.167,1.946,0.649,4.133,0.888,a4 mostrar respuesta
+3,2,2,lento,categoria,2.747,4.606,4.587,4.374,7.956,4.203,a4 mostrar respuesta
+3,2,2,lento,otro,2.661,2.651,3.852,4.195,7.857,5.552,a4 mostrar respuesta
