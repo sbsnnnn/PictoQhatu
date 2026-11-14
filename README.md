@@ -21,6 +21,22 @@ Para desarrollar la interfaz: `npm run dev` en `frontend/` (el proxy de Vite man
 
 Pruebas: `pytest` y `ruff check .` desde `codigo/`; `npm run build` y `npm run lint` desde `codigo/frontend/`.
 
+## Despliegue
+
+El juego está publicado en Render: **https://pictoqhatu.onrender.com**. Funciona en celular, tablet y laptop; el WebSocket usa `wss://` porque la página se sirve por HTTPS.
+
+Es un Web Service de Python que se despliega desde la rama `main`:
+
+| Campo | Valor |
+|---|---|
+| Root Directory | `codigo` |
+| Build Command | `cd frontend && npm ci && npm run build && cd .. && pip install -r requirements.txt` |
+| Start Command | `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT` |
+| Variable de entorno | `PYTHON_VERSION` (la versión de Python del proyecto) |
+
+- El plan Free se suspende tras un rato sin visitas. La primera carga después de eso puede tardar alrededor de un minuto, y como las salas viven en memoria, una partida que estaba abierta empieza de nuevo.
+- Con Root Directory `codigo`, Render redespliega por su cuenta solo cuando cambia algo dentro de `codigo/`. Si solo cambia `datos/` (por ejemplo, una tabla Q nueva), hay que lanzar un "Manual Deploy" desde el panel.
+
 ## Limitaciones conocidas
 
 - **Las salas viven en memoria y no sobreviven a un reinicio del servidor.** Si el servidor se reinicia a mitad de una partida, la pestaña se reconecta sola y empieza una partida nueva desde el inicio.
